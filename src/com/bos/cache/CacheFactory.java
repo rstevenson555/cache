@@ -2,12 +2,14 @@
 
 package com.bos.cache;
 
+import java.util.Map;
+
 /**
 * Defines the interface to the factory class
 * used to create factory instances and instances of the caching classes
 **/
 abstract public class CacheFactory {
-    static private String CACHEFACTORYIMPL = "com.bos.cache.impl.CacheFactoryImpl";
+    static private String cacheFactoryImpl = "com.bos.cache.impl.CacheFactoryImpl";
 
     protected CacheFactory()
     {
@@ -17,7 +19,7 @@ abstract public class CacheFactory {
      * creates a MRUCache with a specified size
      * @param size the size of the cache, should be a <B>prime number</B>
      **/
-    public abstract Cache createMRUCache(int size);
+    public abstract Map createMRUCache(int size);
 
     /**
      * create an expiring cache, that is a cache that knows about items that expire
@@ -27,7 +29,7 @@ abstract public class CacheFactory {
      * so if you want the cache to hold 20 items; you might specify 23 as the size
      * @param milliseconds how long before the object can be replaced
      **/
-    public abstract Cache createIdleExpiringMRUCache(int size,long milliseconds);
+    public abstract Map createIdleExpiringMRUCache(int size,long milliseconds);
     /**
      * create an expiring cache, that is a cache that knows about items that expire
      * after a certain period of time from the point when the object was added (this is it's birth time)
@@ -36,15 +38,19 @@ abstract public class CacheFactory {
      * so if you want the cache to hold 20 items; you might specify 23 as the size
      * @param milliseconds how long before the object can be replaced
      **/
-    public abstract Cache createAgeExpiringMRUCache(int size,long milliseconds);
+    public abstract Map createAgeExpiringMRUCache(int size,long milliseconds);
+    public abstract Map createRelativeExpiringMRUCache(int size,long relativetime,long milliseconds ) ;
 
+    public abstract Map createIdleExpiringHashMap(int size,long milliseconds );
+    public abstract Map createAgeExpiringHashMap(int size,long milliseconds );
+    public abstract Map createRelativeExpiringHashMap(int size,long relativetime,long milliseconds );
     /**
     * Lets a client get a instance to the concrete implemenation
     * of this class
     **/
     static public CacheFactory newInstance() {
         try{
-            Class c = Class.forName(CACHEFACTORYIMPL);
+            Class c = Class.forName(cacheFactoryImpl);
             Object o = c.newInstance();
             return (CacheFactory)o;
         }
