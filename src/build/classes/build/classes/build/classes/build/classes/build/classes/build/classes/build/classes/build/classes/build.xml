@@ -1,0 +1,60 @@
+<project name="caching" basedir="." default="all" >
+     <property name="root" value="${basedir}/.."/>
+     <property name="src" value="${root}/src"/>
+     <property name="dest" value="${root}/dist"/>
+     <property name="lib" value="${root}/lib"/>
+     <property name="docs" value="${root}/docs"/>
+
+     <path id="classpath">
+		<pathelement location="${src}"/>
+	    <fileset dir="${lib}">
+   			<include name="**/*.jar"/>
+   		</fileset>
+    </path>
+
+    <target name="prepare" >
+        <mkdir dir="${root}/dist"/>
+        <mkdir dir="${root}/docs"/>
+    </target>
+
+    <target name="docs" depends="prepare">
+        <javadoc packagenames="com.bos.*"
+           sourcepath="${src}"
+           package="yes"
+           destdir="${docs}"
+           author="Programmers"
+           version="1.0"
+           use="true"
+           windowtitle="BOS Caching API"
+           doctitle="&lt;h1&gt;System Documentation&lt;/h1&gt;"
+           bottom="&lt;i&gt;Copyright &#169; Boise Cascade. All Rights Reserved.&lt;/i&gt;">
+
+	  	<classpath refid="classpath"/>
+	</javadoc>
+    </target>
+
+    <target name="compile" depends="prepare">
+       <javac srcdir="${src}"
+           destdir="${dest}"
+           debug="on"
+           optimize="off"
+		   deprecation="on">
+		   <classpath refid="classpath"/>
+        </javac>
+    </target>
+
+    <target name="build-jars" depends="prepare,compile">
+        <jar jarfile="${root}/dist/bos-caching-impl.jar" 
+	        basedir="${dest}" 
+		    includes="**/impl/*.class"
+        />
+        <jar jarfile="${root}/dist/bos-caching-apis.jar" 
+	        basedir="${dest}" 
+		    includes="**/*.class"
+            excludes="**/impl/*.class"
+            />
+    </target>
+
+    <target name="all" depends="build-jars,docs">
+    </target>
+</project>

@@ -1,0 +1,299 @@
+package com.bos.cache.impl;
+
+import java.util.HashMap;
+import com.bos.cache.Cache;
+import org.apache.log4j.Logger;
+import com.bos.cache.ExpiringCache;
+import java.util.Set;
+import java.util.Iterator;
+
+/**
+* This class implements the expiring cache interface
+* The class encapsulates a object with a specified timeout
+**/
+class ExpiringCacheImpl implements ExpiringCache, Runnable {
+	private HashMap cache = null;
+    private long nextPrint;
+    private Thread thread = null;
+    private static Logger logger = Logger.getLogger(ExpiringCacheImpl.class.getName());
+
+    private long delay; 			// how often to check for stale objects
+    private long staleObjectTime;   // how long before object becomes stale
+    private long ptimeout;  		// how often to print status
+
+
+    /**
+     * create an expiring cache, that is a cache that knows about items that expire
+     * after a certain period of time
+     * @param name the name of the cache
+     * @param _delay how often the cache is checked for expired items
+     * @param to how long is the item valid in the cache
+     * @param ptime the next time to print a status message
+     **/
+    public ExpiringCacheImpl(String name,int _delay, int to,int ptime)
+    {
+        thread = new Thread(this);    
+        thread.setName(name);
+    	cache = new java.util.HashMap(20);
+
+        delay = _delay;
+        staleObjectTime = to;
+        ptimeout = ptime;
+
+        nextPrint = System.currentTimeMillis() + ptimeout;
+    }
+
+      /**
+     * create an expiring cache, that is a cache that knows about items that expire
+     * after a certain period of time
+     * @param name the name of the cache
+     * @param _delay how often the cache is checked for expired items
+     * @param to how long is the item valid in the cache
+     * @param ptime the next time to print a status message
+     **/
+    public ExpiringCacheImpl(Runnable client, String name,int _delay, int to,int ptime)
+    {
+        thread = new Thread(client);    
+        thread.setName(name);
+        cache = new java.util.HashMap(20);
+
+        delay = _delay;
+        staleObjectTime = to;
+        ptimeout = ptime;
+
+        nextPrint = System.currentTimeMillis() + ptimeout;
+    }
+
+    /**
+     * set the local logger
+     * @param the log4j logger object to use
+     **/
+    public void setLogger(Logger log)
+    {
+        if ( log!=null) {
+            logger = log.getLogger(ExpiringCacheImpl.class.getName());
+            logger.info("ExpiringCacheImpl logger has been set");
+        }
+
+    }
+
+    /**
+     * this is a inner class defined to tie a data element
+     * along to a time, so that we can check the data's age
+     * and expire it when it get's too old
+     **/
+	private class UniqueData
+	{
+		private Object data;
+		private long dataAge;
+
+		UniqueData(Object uData)
+		{
+			data = uData;
+			touch();
+		}
+		final long getAge()
+		{
+			return dataAge;
+		}
+
+		synchronized void touch()
+		{
+			dataAge = System.currentTimeMillis();
+		}
+		Object getData()
+		{
+			return getData(true);
+		}
+
+        Object getData(boolean touch)
+        {
+			if ( touch==true)
+            	touch();
+
+            return data;
+        }
+	}
+
+    /**
+     * gets the current size of the cache
+     **/
+    public int size()
+    {
+        return cache.size();
+    }
+
+    /**
+     * retrieves the current delay value
+     * (how often to check for stale objects
+     **/
+    public long getDelay()
+    {
+        return delay;
+    }
+
+    /**
+     * retrieves the stale timeout
+     * (how long before the object becomes stale
+     **/
+    public long getStaleTimeout()
+    {
+        return staleObjectTime;
+    }
+
+    /**
+     * returns the set of keys
+     * @return Set the set of keys for this cache
+     **/
+    public Set keySet()
+    {
+        return cache.keySet();
+    }
+
+    /**
+     * returns a iterator over the keys in the cache
+     **/
+    public Iterator iterator()
+    {
+        return cache.keySet().iterator();
+    }
+
+    /**
+     * get the timeout of how long to wait before the object prints
+     * it's status
+     **/
+    public long getPrintTimeout()
+    {
+        return ptimeout;
+    }
+
+    /**
+     * kick off the thread
+     * Clients will have no-need to call this, it will be automatically started
+     * upon creation
+     **/
+	public void start()
+	{
+        thread.setPriority(Thread.MIN_PRIORITY);
+        thread.start();
+	}
+
+    /**
+     * The over-ridden run method, checks data to see if it has expired and
+     * removes it from the cache if it has
+     **/
+	public void run()
+	{
+    	try {
+			while( true ) {
+				long stale = System.currentTimeMillis() - (staleObjectTime);  // ?? minutes
+
+				synchronized( cache ) {
+					for (java.util.Iterator iter = cache.keySet().iterator(); iter.hasNext(); )  {
+						Object key = (String)iter.next();
+						//System.out.println("session: " + key );
+						UniqueData data = (UniqueData)cache.get( key );
+						if ( stale > data.getAge() ) { // ?? minutes of inactivity, so get rid of it
+							iter.remove();
+                            if ( data!=null)
+	                            onTimedOut( key, data.getData() );
+                            else
+                            	onTimedOut( key, null);
+                        }
+
+					}
+				}
+				if ( System.currentTimeMillis()>nextPrint) {
+					logCacheStats(thread.getName() + " tracking " + cache.size() + " cache");
+
+					nextPrint = System.currentTimeMillis() + (ptimeout);
+				}
+				//System.gc();
+				Thread.sleep(delay); // ?? seconds
+			}
+		}
+		catch(java.lang.InterruptedException ie)
+		{
+			//System.out.println("Thread was interrupted : " + getName() );
+            logger.error("Thread was interrupted", ie);
+		}
+	}
+
+    /**
+     * pre-allocate the cache
+     * @param sz the size to pre-allocate the cache to
+     **/
+    public void setCacheSize(int sz)
+    {
+        cache = new java.util.HashMap(sz);
+    }
+
+    /**
+     * remove all items from the cache
+     **/
+    public void clear()
+    {
+		synchronized( cache ) {
+			for (java.util.Iterator iter = cache.keySet().iterator(); iter.hasNext(); )  {
+				Object sessionId = (Object)iter.next();
+				UniqueData data = (UniqueData)cache.get( sessionId );
+				iter.remove();
+			}
+		}
+    }
+
+    public void logCacheStats(String s){
+        logger.info( s );
+    }
+
+    public void put( Object key, Object obj)
+	{
+    	if ( key == null || obj == null )
+			return;
+
+		synchronized( cache ) {
+			UniqueData data = new UniqueData( obj );
+			cache.put( key, data );
+		}
+	}
+
+    public Object get(Object key)
+    {
+        UniqueData data;
+        if ( key == null)
+        	return null;
+
+		data = (UniqueData)cache.get( key );
+        if (data != null)
+		    return data.getData();
+        return data;
+    }
+
+    public void remove(Object key)
+    {
+     	synchronized( cache ) {
+	        UniqueData data = (UniqueData)cache.get( key );
+			cache.remove( key );
+            if ( data != null)
+	            onRemove( key, data.getData() );
+            else
+            	onRemove( key, null );
+		}
+    }
+
+    public void onRemove(Object key,Object data)
+    {
+       // do nothing
+    }
+
+    public void onTimedOut( Object key,Object data)
+    {
+        // do nothing
+    }
+
+    public Object getByIntKey(int notusedcurrently){
+        return null;
+    }
+
+}
+

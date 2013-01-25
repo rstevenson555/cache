@@ -1,0 +1,20 @@
+package com.bos.cache;
+
+import com.bos.cache.impl.MRUData;
+import com.bos.cache.impl.NonExpiringData;
+import com.bos.cache.impl.IdleExpiringData;
+
+public class IdleExpiringFactory extends CacheDataFactory {
+    private static IdleExpiringFactory instance = new IdleExpiringFactory();
+
+    public MRUData create(Object key,Object value)
+    {
+        return new IdleExpiringData(key,value);
+    }
+
+    public static CacheDataFactory getInstance()
+    {
+        return instance;
+    }
+}
+

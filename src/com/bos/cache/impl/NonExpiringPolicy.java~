@@ -1,0 +1,63 @@
+package com.bos.cache.impl;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class NonExpiringData<K, V> extends MRUData<K,V> implements java.util.Map.Entry<K,V>
+{
+    private V value;
+    private K key;
+
+    public NonExpiringPolicy(K key,V value)
+    {
+        this.key = key;
+        this.value = value;
+    }
+
+    public MRUData<K,V> create(K key,V value)
+    {
+        return new NonExpiringPolicy<K,V>(key,value);
+    }
+
+    public V lookup(K key)
+    {
+        if ( getKey().equals(key))  {
+            return getValue();
+        }
+        return null;
+    }
+
+    public K getKey() {
+        return key;
+    }
+
+    public V getValue() {
+        return value;
+    }
+    public V setValue(V value)
+    {
+        this.value =  value;
+        return this.value;
+    }
+
+    public boolean equals(Object o)
+    {
+        NonExpiringPolicy other = (NonExpiringPolicy)o;
+        return (getKey()==null ?  other.getKey()==null : getKey().equals(other.getKey()))  &&
+            (getValue()==null ?
+            other.getValue()==null : getValue().equals(other.getValue()));
+    }
+
+    /**
+     * the hashCode is a xor of the key hashcode with the value hashcode
+     **/
+    public int hashCode()
+    {
+       return (getKey()==null ? 0 : getKey().hashCode()) ^
+            (getValue()==null ? 0 : getValue().hashCode());
+    }
+}
+    

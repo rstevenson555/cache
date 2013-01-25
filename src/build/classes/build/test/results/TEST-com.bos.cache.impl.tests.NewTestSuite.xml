@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="1" failures="0" hostname="OMX999Y6KWL" name="com.bos.cache.impl.tests.NewTestSuite" tests="1" time="0.0" timestamp="2009-04-20T21:06:05">
+  <properties>
+    <property name="default.javac.source" value="1.5" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="libs.toplink.maven-pom" value="" />
+    <property name="buildfile" value="nbbuild.xml" />
+    <property name="javac.source" value="1.5" />
+    <property name="netbeans.system_http_proxy" value="DIRECT" />
+    <property name="java.home" value="C:\jdk1.5.0_16\jre" />
+    <property name="libs.jaxws21.src" value="" />
+    <property name="javadoc.version" value="false" />
+    <property name="libs.CopyLibs.classpath" value="C:\Program Files\NetBeans 6.1\java2\ant\extra\org-netbeans-modules-java-j2seproject-copylibstask.jar" />
+    <property name="libs.ANT.maven-pom" value="" />
+    <property name="libs.javac-api.src" value="" />
+    <property name="soapui.logroot" value="C:\Documents and Settings\I0360B6\.netbeans\6.1\" />
+    <property name="libs.ANT.javadoc" value="" />
+    <property name="java.endorsed.dirs" value="C:\jdk1.5.0_16\jre\lib\endorsed" />
+    <property name="libs.MySQLDriver.classpath" value="C:\Program Files\NetBeans 6.1\ide9\modules\ext\mysql-connector-java-5.1.5-bin.jar" />
+    <property name="libs.junit.maven-pom" value="" />
+    <property name="libs.PostgreSQLDriver.src" value="" />
+    <property name="sun.java2d.noddraw" value="true" />
+    <property name="nbplatform.default.harness.dir" value="C:\Program Files\NetBeans 6.1/harness" />
+    <property name="debug-args-line" value="-Xdebug" />
+    <property name="netbeans.hash.code" value="unique=NB_JAVA0f5d599df-cb74-4dd3-9172-c2e7a50b24e6" />
+    <property name="build.sysclasspath" value="ignore" />
+    <property name="have.sources" value="true" />
+    <property name="includes" value="**" />
+    <property name="source.encoding" value="UTF-8" />
+    <property name="libs.jaxws21.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\activation.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\FastInfoset.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\http.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\api\jaxb-api.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\jaxb-impl.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\jaxb-xjc.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\api\jaxws-api.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\jaxws-rt.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\jaxws-tools.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\api\jsr173_api.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\api\jsr181-api.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\api\jsr250-api.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\api\saaj-api.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\saaj-impl.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\sjsxp.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\stax-ex.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\streambuffer.jar" />
+    <property name="libs.swing-app-framework.javadoc" value="C:\Program Files\NetBeans 6.1\java2\docs\appframework-1.0.3-doc.zip" />
+    <property name="sun.os.patch.level" value="Service Pack 2" />
+    <property name="java.vendor.url" value="http://java.sun.com/" />
+    <property name="platforms.JDK_1.5.compiler" value="modern" />
+    <property name="java.version" value="1.5.0_16" />
+    <property name="libs.jaxb21.javadoc" value="" />
+    <property name="platforms.JDK_1.5.home" value="C:\Program Files\Java\jdk1.5.0_15" />
+    <property name="javac.debug" value="true" />
+    <property name="org.openide.major.version" value="IDE/1" />
+    <property name="run.classpath" value="..\..\b2bomx\jars\commons-logging-1.0.4.jar:..\..\b2bomx\jars\log4j-1.2.8.jar:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar:build/classes" />
+    <property name="libs.PostgreSQLDriver.maven-pom" value="" />
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi" />
+    <property name="test.tests.dir" value="tests" />
+    <property name="netbeans.autoupdate.variant" value="" />
+    <property name="libs.absolutelayout.javadoc" value="" />
+    <property name="libs.junit_4.maven-pom" value="" />
+    <property name="netbeans.buildnumber" value="200804211638" />
+    <property name="manifest.file" value="manifest.mf" />
+    <property name="platforms.JDK_1.5.bootclasspath" value="C:\Program Files\Java\jdk1.5.0_15\jre\lib\rt.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\i18n.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\jce.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.5.0_15\jre\classes;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\classes12.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\dnsns.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\dns_sd.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\localedata.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\ojdbc14.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\orai18n.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\serializer.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\sunjce_provider.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\sunpkcs11.jar;C:\Program Files\Java\jdk1.5.0_15\jre\lib\ext\xercesImpl.jar" />
+    <property name="libs.swing-app-framework.maven-pom" value="" />
+    <property name="user.name" value="i0360b6" />
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+    <property name="sun.jnu.encoding" value="Cp1252" />
+    <property name="java.runtime.name" value="Java(TM) 2 Runtime Environment, Standard Edition" />
+    <property name="application.vendor" value="i0360b6" />
+    <property name="jdk.home" value="C:\jdk1.5.0_16" />
+    <property name="sun.awt.keepWorkingSetOnMinimize" value="true" />
+    <property name="netbeans.autoupdate.version" value="1.23" />
+    <property name="org.openide.TopManager" value="org.netbeans.core.NonGui" />
+    <property name="netbeans.dirs" value="C:\Program Files\NetBeans 6.1\nb6.1;C:\Program Files\NetBeans 6.1\ide9;C:\Program Files\NetBeans 6.1\java2;C:\Program Files\NetBeans 6.1\xml2;C:\Program Files\NetBeans 6.1\apisupport1;C:\Program Files\NetBeans 6.1\profiler3;C:\Program Files\NetBeans 6.1\gsf1;C:\Program Files\NetBeans 6.1\harness" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="javadoc.author" value="false" />
+    <property name="user.timezone" value="" />
+    <property name="netbeans.system_http_non_proxy_hosts" value="" />
+    <property name="manifest.available" value="true" />
+    <property name="libs.spring-framework.maven-pom" value="" />
+    <property name="libs.swing-layout.maven-pom" value="" />
+    <property name="libs.junit.javadoc" value="C:\Program Files\NetBeans 6.1\java2\docs\junit-3.8.2-api.zip" />
+    <property name="org.openide.specification.version" value="6.2" />
+    <property name="path.separator" value=";" />
+    <property name="version-output" value="java version &quot;1.5" />
+    <property name="libs.absolutelayout.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\AbsoluteLayout.jar" />
+    <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
+    <property name="file.encoding" value="Cp1252" />
+    <property name="dist.javadoc.dir" value="dist/javadoc" />
+    <property name="https.nonProxyHosts" value="localhost|127.0.0.1|OMX999Y6KWL" />
+    <property name="ant.file.cache" value="D:\apps\cache\src\nbbuild.xml" />
+    <property name="libs.junit.src" value="" />
+    <property name="libs.jaxb21.maven-pom" value="" />
+    <property name="ant.file" value="D:\apps\cache\src\nbbuild.xml" />
+    <property name="libs.junit_4.src" value="" />
+    <property name="netbeans.autoupdate.language" value="en" />
+    <property name="do.jar" value="true" />
+    <property name="java.io.tmpdir" value="C:\DOCUME~1\I0360B6\LOCALS~1\Temp\" />
+    <property name="build.test.results.dir" value="build/test/results" />
+    <property name="user.language" value="en" />
+    <property name="line.separator" value="
+" />
+    <property name="apple.laf.useScreenMenuBar" value="true" />
+    <property name="libs.absolutelayout.src" value="" />
+    <property name="javac.compilerargs" value="" />
+    <property name="jar.compress" value="false" />
+    <property name="javac.compilerargs.jaxws" value="" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="libs.javac-api.maven-pom" value="" />
+    <property name="javadoc.private" value="false" />
+    <property name="sun.desktop" value="windows" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="build.test.classes.dir" value="build/test/classes" />
+    <property name="libs.MySQLDriver.javadoc" value="" />
+    <property name="netbeans.dynamic.classpath" value="C:\Program Files\NetBeans 6.1\platform8\core\core.jar;C:\Program Files\NetBeans 6.1\platform8\core\org-openide-filesystems.jar;C:\Program Files\NetBeans 6.1\nb6.1\core\org-netbeans-upgrader.jar;C:\Program Files\NetBeans 6.1\nb6.1\core\locale\core_nb.jar" />
+    <property name="libs.beans-binding.javadoc" value="C:\Program Files\NetBeans 6.1\java2\docs\beansbinding-1.2.1-doc.zip" />
+    <property name="platform.active" value="default_platform" />
+    <property name="javac.includes.binary" value="" />
+    <property name="src.src.dir" value="." />
+    <property name="http.nonProxyHosts" value="localhost|127.0.0.1|OMX999Y6KWL" />
+    <property name="libs.junit_4.javadoc" value="" />
+    <property name="javac.includes" value="com/bos/cache/impl/tests/NewTestSuite.java" />
+    <property name="libs.spring-framework.src" value="" />
+    <property name="netbeans.autoupdate.country" value="US" />
+    <property name="libs.beans-binding.maven-pom" value="" />
+    <property name="javadoc.encoding" value="UTF-8" />
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob" />
+    <property name="dist.jar" value="dist/cache.jar" />
+    <property name="meta.inf.dir" value="${src.dir}/META-INF" />
+    <property name="ant.version" value="Apache Ant version 1.7.0 compiled on December 13 2006" />
+    <property name="netbeans.home" value="C:\Program Files\NetBeans 6.1\platform8" />
+    <property name="javadoc.nonavbar" value="false" />
+    <property name="user.properties.file" value="C:\Documents and Settings\I0360B6\.netbeans\6.1\build.properties" />
+    <property name="libs.toplink.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\toplink\toplink-essentials.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\toplink\toplink-essentials-agent.jar" />
+    <property name="netbeans.importclass" value="org.netbeans.upgrade.AutoUpgrade" />
+    <property name="libs.spring-framework.javadoc" value="" />
+    <property name="libs.CopyLibs.maven-pom" value="" />
+    <property name="build.generated.dir" value="build/generated" />
+    <property name="netbeans.home+have.tests" value="true" />
+    <property name="os.name" value="Windows XP" />
+    <property name="java.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="run.test.classpath" value="..\..\b2bomx\jars\commons-logging-1.0.4.jar:..\..\b2bomx\jars\log4j-1.2.8.jar:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar:build/classes:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-3.8.2.jar:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar:build/test/classes" />
+    <property name="java.vm.name" value="Java HotSpot(TM) Client VM" />
+    <property name="libs.CopyLibs.src" value="" />
+    <property name="libs.jaxb21.src" value="" />
+    <property name="org.openide.version" value="deprecated" />
+    <property name="libs.junit.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-3.8.2.jar" />
+    <property name="libs.beans-binding.src" value="" />
+    <property name="java.library.path" value="C:\jdk1.5.0_16\jre\bin;.;C:\WINDOWS\system32;C:\WINDOWS;D:\oracle\ora81\bin;C:\Program Files\Windows Resource Kits\Tools\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;;C:\Program Files\RSA Security\RSA SecurID Software Token\;C:\jdk1.5.0_16\bin;d:\apps\vim\vim63;C:\tibco\tibrv\BIN;D:\apps\apache-ant-1.7.1\bin;C:\Program Files\jEdit;c:\cygwin\bin;C:\Program Files\ATI Technologies\ATI Control Panel;c:\jadnt157;C:\jdk1.5.0_16\bin;C:\Program Files\GNU\WinCvs 1.3;C:\Program Files\QuickTime\QTSystem\;D:\apps\jruby-1.1.6\bin" />
+    <property name="libs.PostgreSQLDriver.javadoc" value="" />
+    <property name="libs.toplink.javadoc" value="" />
+    <property name="ant.java.version" value="1.5" />
+    <property name="basedir" value="D:\apps\cache\src" />
+    <property name="javadoc.noindex" value="false" />
+    <property name="java.class.version" value="49.0" />
+    <property name="ant.file.cache-impl" value="D:\apps\cache\src\nbproject\build-impl.xml" />
+    <property name="sun.awt.exception.handler" value="org.netbeans.core.startup.TopLogging$AWTHandler" />
+    <property name="javac.test.classpath" value="..\..\b2bomx\jars\commons-logging-1.0.4.jar:..\..\b2bomx\jars\log4j-1.2.8.jar:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar:build/classes:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-3.8.2.jar:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar" />
+    <property name="ant.home" value="C:\Program Files\NetBeans 6.1\java2\ant" />
+    <property name="javadoc.splitindex" value="true" />
+    <property name="libs.toplink.src" value="" />
+    <property name="libs.javac-api.javadoc" value="" />
+    <property name="javadoc.preview" value="true" />
+    <property name="libs.MySQLDriver.maven-pom" value="" />
+    <property name="libs.ANT.classpath" value="D:\apps\apache-ant-1.7.0\lib\ant-commons-net.jar;D:\apps\apache-ant-1.7.0\lib\ant-launcher.jar;D:\apps\apache-ant-1.7.0\lib\ant-nodeps.jar;D:\apps\apache-ant-1.7.0\lib\ant.jar;D:\apps\apache-ant-1.7.0\lib\commons-net-1.4.1.jar" />
+    <property name="libs.CopyLibs.javadoc" value="" />
+    <property name="libs.PostgreSQLDriver.classpath" value="C:\Program Files\NetBeans 6.1\ide9\modules\ext\postgresql-8.3-603.jdbc3.jar" />
+    <property name="libs.jaxws21.maven-pom" value="" />
+    <property name="libs.junit_4.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar" />
+    <property name="build.dir" value="build" />
+    <property name="sun.boot.library.path" value="C:\jdk1.5.0_16\jre\bin" />
+    <property name="application.title" value="cache" />
+    <property name="sun.management.compiler" value="HotSpot Client Compiler" />
+    <property name="libs.swing-app-framework.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\appframework-1.0.3.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\swing-worker-1.1.jar" />
+    <property name="user.variant" value="" />
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment" />
+    <property name="javadoc.encoding.used" value="UTF-8" />
+    <property name="file.reference.cache-src" value="." />
+    <property name="javadoc.windowtitle" value="" />
+    <property name="run.jvmargs" value="" />
+    <property name="build.compiler.emacs" value="true" />
+    <property name="ant.project.name" value="cache" />
+    <property name="libs.spring-framework.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\spring\commons-logging-1.1.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\spring\spring-2.5.jar" />
+    <property name="libs.swing-layout.classpath" value="C:\Program Files\NetBeans 6.1\platform8\modules\ext\swing-layout-1.0.3.jar" />
+    <property name="java.vm.specification.version" value="1.0" />
+    <property name="work.dir" value="D:\apps\cache\src" />
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
+    <property name="javadoc.use" value="true" />
+    <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86" />
+    <property name="java.ext.dirs" value="C:\jdk1.5.0_16\jre\lib\ext" />
+    <property name="os.version" value="5.1" />
+    <property name="excludes" value="" />
+    <property name="user.home" value="C:\Documents and Settings\I0360B6" />
+    <property name="libs.jaxb21.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\activation.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\api\jaxb-api.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\jaxb-impl.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\jaxb-xjc.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\jaxws21\api\jsr173_api.jar" />
+    <property name="org.xml.sax.driver" value="com.sun.org.apache.xerces.internal.parsers.SAXParser" />
+    <property name="javax.xml.parsers.DocumentBuilderFactory" value="org.netbeans.core.startup.DOMFactoryImpl" />
+    <property name="java.vm.vendor" value="Sun Microsystems Inc." />
+    <property name="libs.absolutelayout.maven-pom" value="" />
+    <property name="org.openide.TopManager.GUI" value="true" />
+    <property name="user.dir" value="D:\apps\cache\src" />
+    <property name="file.reference.log4j-1.2.8.jar" value="..\..\b2bomx\jars\log4j-1.2.8.jar" />
+    <property name="application.args" value="" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="java.vm.version" value="1.5.0_16-b02" />
+    <property name="libs.MySQLDriver.src" value="" />
+    <property name="java.class.path" value="D:\apps\b2bomx\jars\commons-logging-1.0.4.jar;D:\apps\b2bomx\jars\log4j-1.2.8.jar;C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar;D:\apps\cache\src\build\classes;C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-3.8.2.jar;D:\apps\cache\src\build\test\classes;D:\apps\cache\src;C:\Program Files\IBM\WebSphere MQ\Java\lib\providerutil.jar;C:\Program Files\IBM\WebSphere MQ\Java\lib\com.ibm.mqjms.jar;C:\Program Files\IBM\WebSphere MQ\Java\lib\ldap.jar;C:\Program Files\IBM\WebSphere MQ\Java\lib\jta.jar;C:\Program Files\IBM\WebSphere MQ\Java\lib\jndi.jar;C:\Program Files\IBM\WebSphere MQ\Java\lib\jms.jar;C:\Program Files\IBM\WebSphere MQ\Java\lib\connector.jar;C:\Program Files\IBM\WebSphere MQ\Java\lib\fscontext.jar;C:\Program Files\IBM\WebSphere MQ\Java\lib\com.ibm.mq.jar;D:\Program Files\Java\jre6\lib\ext\QTJava.zip;C:\Program Files\NetBeans 6.1\java2\ant\lib\ant-launcher.jar;C:\Program Files\NetBeans 6.1\java2\ant\lib\ant.jar;C:\Program Files\NetBeans 6.1\java2\ant\lib\ant-junit.jar" />
+    <property name="javax.xml.parsers.SAXParserFactory" value="org.netbeans.core.startup.SAXFactoryImpl" />
+    <property name="os.arch" value="x86" />
+    <property name="javac.deprecation" value="false" />
+    <property name="nbplatform.default.netbeans.dest.dir" value="C:\Program Files\NetBeans 6.1" />
+    <property name="build.classes.excludes" value="**/*.java,**/*.form" />
+    <property name="dist.dir" value="dist" />
+    <property name="debug.classpath" value="..\..\b2bomx\jars\commons-logging-1.0.4.jar:..\..\b2bomx\jars\log4j-1.2.8.jar:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar:build/classes" />
+    <property name="netbeans.user" value="C:\Documents and Settings\I0360B6\.netbeans\6.1" />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="libs.ANT.src" value="" />
+    <property name="ant.core.lib" value="C:\Program Files\NetBeans 6.1\java2\ant\lib\ant.jar" />
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="do.depend" value="false" />
+    <property name="file.separator" value="\" />
+    <property name="java.runtime.version" value="1.5.0_16-b02" />
+    <property name="debug.test.classpath" value="..\..\b2bomx\jars\commons-logging-1.0.4.jar:..\..\b2bomx\jars\log4j-1.2.8.jar:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar:build/classes:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-3.8.2.jar:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar:build/test/classes" />
+    <property name="sun.boot.class.path" value="C:\jdk1.5.0_16\jre\lib\rt.jar;C:\jdk1.5.0_16\jre\lib\i18n.jar;C:\jdk1.5.0_16\jre\lib\sunrsasign.jar;C:\jdk1.5.0_16\jre\lib\jsse.jar;C:\jdk1.5.0_16\jre\lib\jce.jar;C:\jdk1.5.0_16\jre\lib\charsets.jar;C:\jdk1.5.0_16\jre\classes" />
+    <property name="libs.beans-binding.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\beansbinding-1.2.1.jar" />
+    <property name="have.tests" value="true" />
+    <property name="main.class" value="" />
+    <property name="test.includes" value="com/bos/cache/impl/tests/NewTestSuite.java" />
+    <property name="java.util.logging.config.class" value="org.netbeans.core.startup.TopLogging" />
+    <property name="libs.javac-api.classpath" value="C:\Program Files\NetBeans 6.1\java2\modules\ext\javac-api-nb-7.0-b07.jar" />
+    <property name="user.country" value="US" />
+    <property name="javadoc.notree" value="false" />
+    <property name="libs.jaxws21.javadoc" value="C:\Program Files\NetBeans 6.1\java2\docs\jaxws-2_1-api-doc.zip" />
+    <property name="javac.classpath" value="..\..\b2bomx\jars\commons-logging-1.0.4.jar:..\..\b2bomx\jars\log4j-1.2.8.jar:C:\Program Files\NetBeans 6.1\java2\modules\ext\junit-4.1.jar" />
+    <property name="default.javac.target" value="1.5" />
+    <property name="javadoc.additionalparam" value="" />
+    <property name="build.classes.dir" value="build/classes" />
+    <property name="libs.swing-layout.javadoc" value="C:\Program Files\NetBeans 6.1\platform8\docs\swing-layout-1.0.3-doc.zip" />
+    <property name="libs.swing-layout.src" value="C:\Program Files\NetBeans 6.1\platform8\docs\swing-layout-1.0.3-src.zip" />
+    <property name="java.vendor" value="Sun Microsystems Inc." />
+    <property name="javac.target" value="1.5" />
+    <property name="file.reference.commons-logging-1.0.4.jar" value="..\..\b2bomx\jars\commons-logging-1.0.4.jar" />
+    <property name="file.reference.apps-cache" value=".." />
+    <property name="libs.swing-app-framework.src" value="" />
+    <property name="java.specification.version" value="1.5" />
+    <property name="sun.arch.data.model" value="32" />
+  </properties>
+  <error message="com.bos.cache.impl.tests.NewTestSuite" type="java.lang.ClassNotFoundException">java.lang.ClassNotFoundException: com.bos.cache.impl.tests.NewTestSuite
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:200)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:188)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:268)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:251)
+	at java.lang.ClassLoader.loadClassInternal(ClassLoader.java:319)
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Class.java:164)
+</error>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

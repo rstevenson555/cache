@@ -1,0 +1,8 @@
+package com.bos.cache.impl;
+
+public abstract class MRUData<K,V> {
+    //abstract public MRUData<K,V> create(K key,V value);
+    abstract public V lookup(K key);
+    abstract public K getKey();
+    abstract public V getValue();
+}

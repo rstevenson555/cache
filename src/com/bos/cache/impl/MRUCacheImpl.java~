@@ -1,0 +1,234 @@
+/**
+* This class contains the concrete implementation of the Most Recently Used Cache
+* The cache is created from the Factory method createExpiringCache
+**/
+package com.bos.cache.impl;
+
+import com.bos.cache.Cache;
+import com.bos.cache.CacheDataFactory;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
+
+
+/**
+* This is a implementation of a very fast MRU cache, the size of the cache
+* is a fixed size, so we don't have to deal with growing
+* and shrinking of the cache
+* The Cache will tend to have items in it that are most often used and will
+* throw out the Least Used Items
+**/
+class MRUCacheImpl implements Cache {
+  
+    // the initial size is 23 (prime) but you should change this to
+    // fit your needs
+    private ArrayList<MRUData> cache = null;
+    private CacheDataFactory factory = null;
+
+    public MRUCacheImpl(CacheDataFactory fact) {
+        factory = fact;
+    }
+
+    /**
+     * Contructor initialize the cache to the initial size of 23 (prime) placeholders
+     * but you should change this to fit your needs
+     * @see #setCacheSize(int size)
+     **/
+    public MRUCacheImpl()
+    {
+        cache = new ArrayList(23);
+        for (int i = 0; i < 23; i++) {
+            cache.add(null);
+        }
+    }
+
+     /**
+     * Contructor initialize the cache to the specified size
+     * @param size, the number of cache entries that the cache can maintain, should be a prime number
+     * @see #setCacheSize(int size)
+     **/
+    public MRUCacheImpl(int size)
+    {
+        cache = new ArrayList(size);
+        for (int i = 0; i < size; i++) {
+            cache.add(null);
+        }
+
+    }
+
+    /**
+     * pre-allocates the size of this cache object
+     * @param size allocates size cache entries
+     * the size of the cache should be a prime-number, this allows a good
+     * distribution of the keys across the span of the cache
+     **/
+    public void setCacheSize(int size)
+    {
+        if (size > cache.size()) {
+            for (int i = cache.size(); i < size; i++) {
+                cache.add(null);
+            }
+        } else if (size == cache.size()) {
+            // do nothing
+        } else if (size < cache.size()) {
+            cache.clear();
+            for (int i = 0; i < size; i++) {
+                cache.add(null);
+            }
+        }
+    }
+
+    /**
+     * returns a cache key based on it's position in the cache
+     * @return the Object placed at pos
+     **/
+    Object get(int pos)
+    {
+        return cache.get(pos);
+    }
+
+    /**
+     * @param pos to element to remove
+     **/
+    void remove(int pos)
+    {
+        cache.set(pos, null);
+    }
+
+    /**
+     * returns the size of the mru cache table
+     **/
+    public int size()
+    {
+        return cache.size();
+    }
+
+    /**
+     * Looks up an object and returns the value object found or null if the key is not found
+     * @param key the value to look for
+     **/
+    public Object get(Object key)
+    {
+        MRUData obj = null;
+        Object value = null;
+
+        if ( key == null)
+            return null;
+
+        // lookup the key in the cache
+
+        // synchronization is not a problem here
+        // if someone changes or resets a key/value right before this
+        // it will be properly handled, either it won't find a match in the if or the
+        // obj being returned will be null, that is fine and expected for a no-match
+        // then the client will just lookup whatever data he was looking for in the cache
+
+        if ( (obj = cache.get( Math.abs(key.hashCode()) % cache.size()) )!=null ) {
+            // see if the key passed in matches this one
+            if ( (value = obj.lookup(key))!=null) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    public Object getByIntKey(int key){
+
+        MRUData obj = null;
+        if ( (obj = cache.get( Math.abs(key) % cache.size()) )!=null ) {
+	        return obj.getValue();
+        }
+        return null;
+    }
+
+    /**
+     * clear resets any cache entries to null
+     **/
+    public void clear()
+    {
+        // synchronization is not a problem here
+        // if this code were to be called while someone was getting or setting data
+        // in the cache, it would still work
+        // in the case of someone setting a value in the cache, then this coming along
+        // and resetting the cache-entry to null is fine, because the client still has the data reference
+        // in the case of someone getting a value from the cache while this is being reset
+        // is fine as well because, if they get the data before it's set, they got it
+        // if they as for it after it gets set to null, that's fine as well it's null and
+        // that's a normal expected condition
+        for (int i = 0, tot = cache.size(); i < tot; i++) {
+            cache.set(i, null);
+        }
+    }
+
+    /**
+     * returns a iterator, to loop over all java.util.Map.Entry's in the cache
+     **/
+    public Iterator iterator()
+    {
+        return new MRUCacheIterator (this);
+    }
+
+
+    /**
+     * remove a reference to the given key
+     * @param the key to lookup and remove
+     **/
+    public void remove(Object key)
+    {
+        if ( key == null)
+            return;
+
+        // find the place to put it and stuff it in, overwriting what was
+        // previously there
+        // synchronization is not needed here, if this value changes to null
+        // either before or after a client looks at it, it's not a problem
+        cache.set( Math.abs(key.hashCode()) % cache.size(), null);
+    }
+
+    /**
+     * Updates the cache with the key and value provided
+     * @param key the key value used to lookup this value
+     * @param value the value object associated with the given key
+     **/
+    public void put(Object key,Object value)
+    {
+        if ( key == null)
+            return;
+
+        // find the place to put it and stuff it in, overwriting what was
+        // previously there
+        cache.set( Math.abs(key.hashCode()) % cache.size(), factory.create(key,value));
+    }
+
+    /**
+     * returns the set of keys
+     * @return Set the set of keys for this cache
+     **/
+    public Set keySet() {
+        TreeSet set = new TreeSet();
+
+        for(MRUData val: cache) {
+            if (val != null) {
+                set.add(val.getKey());
+            }
+        }
+        return set;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.omx.cache.Cache#getKeys()
+     */
+    public ArrayList getKeys() {
+        ArrayList allKeys = new ArrayList(keySet());
+
+        /*if (isDebug()) {
+            logDebug("Key Count: " + allKeys.size());
+        } */
+        return allKeys;
+    }
+}
