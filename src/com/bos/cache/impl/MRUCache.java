@@ -316,7 +316,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         return (key1 == key2) || key1.equals(key2);
     }
 
-    static boolean areEqualValues(Object value1, Object value2) {
+    private static boolean areEqualValues(Object value1, Object value2) {
         return (value1 == value2) || value1.equals(value2);
     }
 
@@ -581,10 +581,9 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         } catch (CloneNotSupportedException x) {
             // This is impossible.
         }
-        final Iterator<Map.Entry<K, V>> it = entrySet().iterator();
+        //final Iterator<Map.Entry<K, V>> it = entrySet().iterator();
         int next = 0;
-        while (it.hasNext()) {
-            final Map.Entry<K, V> pair = it.next();
+        for(Map.Entry<K,V> pair:entrySet()) {
             // Optimize in case the Entry is one of our own.
             if (pair != null) {
                 copy.buckets[next++] = factory.createPair(pair.getKey(), pair.getValue());

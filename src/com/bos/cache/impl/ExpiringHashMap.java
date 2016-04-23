@@ -296,7 +296,7 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
      * @param loadFactor the initial load factor.
      * @throws IllegalArgumentException when the capacity is less than zero or the load factor is less or equal to zero.
      */
-    public ExpiringHashMap(int capacity, float loadFactor, CacheDataFactory<K, V> fact) {
+    private ExpiringHashMap(int capacity, float loadFactor, CacheDataFactory<K, V> fact) {
         factory = fact;
         if (capacity >= 0 && loadFactor > 0) {
             capacity = calculateCapacity(capacity);
@@ -801,7 +801,7 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
         return key.hashCode();
     }
 
-    static boolean areEqualKeys(Object key1, Object key2) {
+    private static boolean areEqualKeys(Object key1, Object key2) {
         return (key1 == key2) || key1.equals(key2);
     }
 

@@ -31,7 +31,7 @@ public class IdleExpiringMapEntry<K, V> extends NonExpiringMapEntry<K, V> {
      *
      * returns how long this data has been idle
      **/
-    public final long getIdleTime() {
+    final long getIdleTime() {
         return System.currentTimeMillis() - idleTime;
     }
 

@@ -18,7 +18,7 @@ public abstract class CacheData<K, V> implements Map.Entry<K, V>, Comparable<Cac
     final int origKeyHash;
     CacheData<K, V> next;
 
-    public CacheData(K theKey, int hash) {
+    protected CacheData(K theKey, int hash) {
         key = theKey;
         this.origKeyHash = hash;
     }

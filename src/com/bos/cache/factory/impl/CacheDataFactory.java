@@ -9,7 +9,7 @@ import com.bos.cache.impl.CacheData;
 **/
 abstract public class CacheDataFactory<K,V> {
 
-    protected CacheDataFactory() {}
+    CacheDataFactory() {}
 
     /**
      * Defines the abstract method used to create a data pair (key/value)
