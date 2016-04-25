@@ -801,7 +801,7 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
         return key.hashCode();
     }
 
-    private static boolean areEqualKeys(Object key1, Object key2) {
+    public static boolean areEqualKeys(Object key1, Object key2) {
         return (key1 == key2) || key1.equals(key2);
     }
 
