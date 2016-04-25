@@ -1,14 +1,14 @@
 /**
  * This class contains the concrete implementation of the Most Recently Used Cache The buckets is created from the
  * Factory method createExpiringCache
- *
  */
 package com.bos.cache.impl;
 
 import com.bos.cache.CacheDelegate;
 import com.bos.cache.factory.impl.CacheDataFactory;
+
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * This is a implementation of a very fast MRU list, the size of the buckets are a fixed size, so we don't have to deal
@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * throw out the Least Used Items. The size of the cache should be a primary number. This helps to optimize the
  * distribution of keys to avoid collisions. This class implements the Map interface so can be used interchangable with
  * HashMap's etc.
- *
  */
 public class MRUCache<K, V> implements Map<K, V>, Cloneable {
 
@@ -24,7 +23,8 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
     // fit your needs
     private static final int DEFAULTSIZE = 23;
     private static int defaultSize = DEFAULTSIZE;
-    private AtomicReference<CacheData<K, V>> buckets[] = null;
+    //    private AtomicReference<CacheData<K, V>> buckets[] = null;
+    private AtomicReferenceArray<CacheData<K, V>> buckets = null;
     private CacheDataFactory<K, V> factory = null;
     private AbstractSet<K> keySet;
     private AbstractCollection<V> valuesCollection = null;
@@ -63,14 +63,12 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      *
      * @param size the number of buckets entries that the buckets can maintain, should be a prime number
      * @param fact the factory to use with this cache
-     *
      */
     public MRUCache(int size, CacheDataFactory<K, V> fact) {
         factory = fact;
-        buckets = new AtomicReference[size];
-        Arrays.fill(buckets, null);
+        buckets = new AtomicReferenceArray<CacheData<K, V>>(size);
     }
-      
+
     public void setCacheDelegate(CacheDelegate dele) {
         cacheDelegate = dele;
     }
@@ -89,7 +87,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         CacheData<K, V> m = getEntry(key);
         if (m != null) {
             // see if the key passed in matches this one
-            if (m.validateKey((K) key,cacheDelegate) == null) {
+            if (m.validateKey((K) key, cacheDelegate) == null) {
                 return true;
             }
         }
@@ -101,11 +99,12 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      *
      * @param key the value to look for
      * @return returns the Value for the Key provided or null if a match is not found
-     *
      */
     public V get(Object key) {
-        if ( cacheDelegate != null) cacheDelegate.keyLookup();
-        
+        if (cacheDelegate != null) {
+            cacheDelegate.keyLookup();
+        }
+
         if (key == null) {
             return null;
         }
@@ -114,7 +113,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         V value;
         if (m != null) {
             // see if the key passed in matches this one
-            if ((value = m.validateKey((K) key,cacheDelegate)) != null) {
+            if ((value = m.validateKey((K) key, cacheDelegate)) != null) {
                 return value;
             }
         } else {
@@ -129,7 +128,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @return a CacheData pair is returned or null if no match
      */
     final CacheData<K, V> getEntry(Object key) {
-        AtomicReference<CacheData<K, V>> pair;
+        CacheData<K, V> pair;
         // validateKey the key in the buckets
 
         // synchronization is not a problem here
@@ -137,13 +136,12 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         // it will be properly handled, either it won't find a validateKey in the if or the
         // obj being returned will be null, that is fine and expected for a no-validateKey
         // then the client will just validateKey whatever data he was looking for in the buckets
-        pair = buckets[Math.abs(key.hashCode()) % buckets.length];
-        return pair.get();
+        pair = buckets.get(Math.abs(key.hashCode()) % buckets.length());
+        return pair;
     }
 
     /**
      * clear resets any buckets entries to null, the size of the cache remains fixed and constant
-     *
      */
     public void clear() {
         // synchronization is not a problem here
@@ -155,8 +153,9 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         // is fine as well because, if they get the data before it's set, they got it
         // if they as for it after it gets set to null, that's fine as well it's null and
         // that's a normal expected condition
-        Arrays.fill(buckets, null);
-
+        for (int i = 0, tot = buckets.length(); i < tot; i++) {
+            buckets.set(i, null);
+        }
     }
 
     /**
@@ -164,7 +163,6 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      *
      * @param key the key to validateKey and remove
      * @return returns the previous value at this key position in the cache
-     *
      */
     public V remove(Object key) {
         if (key == null) {
@@ -189,18 +187,17 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         // previously there
         // synchronization is not needed here, if this value changes to null
         // either before or after a client looks at it, it's not a problem
-        int pos = Math.abs(key.hashCode()) % buckets.length;
-        AtomicReference<CacheData<K, V>> mvalue = buckets[pos];
-        buckets[pos].set(null);
-        return mvalue.get();
+        int pos = Math.abs(key.hashCode()) % buckets.length();
+        CacheData<K, V> mvalue = buckets.get(pos);
+        buckets.set(pos, null);
+        return mvalue;
     }
 
     /**
      * Updates the buckets with the key and value provided
      *
-     * @param key the key value used to validateKey this value
+     * @param key   the key value used to validateKey this value
      * @param value the value object associated with the given key
-     *
      */
     public V put(K key, V value) {
         if (key == null) {
@@ -209,17 +206,16 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
 
         // find the place to put it and stuff it in, overwriting what was
         // previously there
-        int pos = Math.abs(key.hashCode()) % buckets.length;
-        AtomicReference<CacheData<K, V>> pvalue = buckets[pos];
-        buckets[pos].set(factory.createPair(key, value));
-        return (pvalue == null) ? null : pvalue.get().value;
+        int pos = Math.abs(key.hashCode()) % buckets.length();
+        CacheData<K, V> pvalue = buckets.get(pos);
+        buckets.set(pos, factory.createPair(key, value));
+        return (pvalue == null) ? null : pvalue.value;
     }
 
     /**
      * returns the set of keys
      *
      * @return Set the set of keys for this buckets
-     *
      */
     public Set<K> keySet() {
         if (keySet == null) {
@@ -325,7 +321,6 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * returns the set of keys
      *
      * @return Set the set of keys for this buckets
-     *
      */
     public Set<Map.Entry<K, V>> entrySet() {
         return new CacheEntrySet<K, V>(this);
@@ -335,9 +330,10 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * anything in the cache counters will be reset starting now
      */
     public void reset() {
-        for (AtomicReference<CacheData<K, V>> pair : buckets) {
+        for (int i = 0, tot = buckets.length(); i < tot; i++) {
+            CacheData<K, V> pair = buckets.get(i);
             if (pair != null) {
-                pair.get().reset();
+                pair.reset();
             }
         }
     }
@@ -345,9 +341,9 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
     private static class AbstractMapIterator<K, V> {
 
         int position = 0;
-        AtomicReference<CacheData<K, V>> futureEntry;
-        AtomicReference<CacheData<K, V>> currentEntry;
-        AtomicReference<CacheData<K, V>> prevEntry;
+        CacheData<K, V> futureEntry;
+        CacheData<K, V> currentEntry;
+        CacheData<K, V> prevEntry;
         private final MRUCache<K, V> associatedMap;
 
         AbstractMapIterator(MRUCache<K, V> hm) {
@@ -359,9 +355,9 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
             if (futureEntry != null) {
                 return true;
             }
-            while (position < associatedMap.buckets.length) {
-                AtomicReference<CacheData<K, V>> pair = associatedMap.buckets[position];
-                if (pair == null || ((AtomicReference<CacheData<K, V>>) pair).get().validateKey() == null) {
+            while (position < associatedMap.buckets.length()) {
+                CacheData<K, V> pair = associatedMap.buckets.get(position);
+                if (pair == null || ((CacheData<K, V>) pair).validateKey() == null) {
                     position++;
                 } else {
                     return true;
@@ -375,15 +371,15 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
                 throw new NoSuchElementException();
             }
             if (futureEntry == null) {
-                currentEntry = associatedMap.buckets[position++];
-                futureEntry.set(currentEntry.get().next);
+                currentEntry = associatedMap.buckets.get(position++);
+                futureEntry = currentEntry.next;
                 prevEntry = null;
             } else {
                 if (currentEntry != null) {
                     prevEntry = currentEntry;
                 }
                 currentEntry = futureEntry;
-                futureEntry.set(futureEntry.get().next);
+                futureEntry = futureEntry.next;
             }
         }
 
@@ -392,9 +388,9 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
                 throw new IllegalStateException();
             }
             if (prevEntry == null) {
-                associatedMap.remove(currentEntry.get().key);
+                associatedMap.remove(currentEntry.key);
             } else {
-                prevEntry.get().next = currentEntry.get().next;
+                prevEntry.next = currentEntry.next;
             }
             currentEntry = null;
         }
@@ -408,7 +404,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
 
         public Map.Entry<K, V> next() {
             makeNext();
-            return currentEntry.get();
+            return currentEntry;
         }
     }
 
@@ -420,7 +416,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
 
         public K next() {
             makeNext();
-            return currentEntry.get().key;
+            return currentEntry.key;
         }
     }
 
@@ -432,7 +428,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
 
         public V next() {
             makeNext();
-            return currentEntry.get().value;
+            return currentEntry.value;
         }
     }
 
@@ -514,20 +510,20 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @return true if the key is contained in the cache
      */
     public boolean containsKey(Object key) {
-         if ( cacheDelegate != null) cacheDelegate.keyLookup();
-        
+        if (cacheDelegate != null) {
+            cacheDelegate.keyLookup();
+        }
+
         if (key == null) {
             return false;
         }
 
         CacheData<K, V> m = getEntry(key);
-        V value;
         if (m != null) {
             // see if the key passed in matches this one
-            if ((value = m.validateKey((K)key,cacheDelegate)) != null) {
+            if ((m.validateKey((K) key, cacheDelegate)) != null) {
                 return true;
             }
-        } else {
         }
         return false;
     }
@@ -538,35 +534,35 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @return boolean
      */
     public boolean isEmpty() {
-        for (AtomicReference<CacheData<K, V>> entry : buckets) {
+        for (int i = 0, tot = buckets.length(); i < tot; i++) {
+            CacheData<K, V> entry = buckets.get(i);
             // if we find a key that is valid it's not empty
-            if (entry != null && entry.get().validateKey() != null) {
+            if (entry != null && entry.validateKey() != null) {
                 return false;
             }
         }
         return true;
     }
-    
+
     /**
-     *
      * @return the # of active items in the cache, which is the active size
      */
     public int size() {
         int valid = 0;
-        for (AtomicReference<CacheData<K, V>> entry : buckets) {
-            if (entry != null && entry.get().validateKey() != null) {
+        for (int i = 0, tot = buckets.length(); i < tot; i++) {
+            CacheData<K, V> entry = buckets.get(i);
+            if (entry != null && entry.validateKey() != null) {
                 valid++;
             }
         }
-        return valid;    
+        return valid;
     }
-    
+
     /**
-     *
      * @return the total possible size
      */
     public int getTotalSize() {
-        return buckets.length;
+        return buckets.length();
     }
 
     /**
@@ -583,10 +579,10 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
             // This is impossible.
         }
         int next = 0;
-        for(Map.Entry<K,V> pair:entrySet()) {
+        for (Map.Entry<K, V> pair : entrySet()) {
             // Optimize in case the Entry is one of our own.
             if (pair != null) {
-                copy.buckets[next++] = new AtomicReference<CacheData<K,V>>(factory.createPair(pair.getKey(), pair.getValue()));
+                copy.buckets.set(next, factory.createPair(pair.getKey(), pair.getValue()));
             }
         }
         return copy;
