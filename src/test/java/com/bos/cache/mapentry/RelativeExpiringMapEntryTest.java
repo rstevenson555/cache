@@ -22,7 +22,8 @@ import org.junit.*;
 public class RelativeExpiringMapEntryTest {
     RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     Date startupdate = new Date(mx.getStartTime());
-    long startuptime = startupdate.getTime();
+    //long startuptime = startupdate.getTime();
+    long startuptime = new Date().getTime();
 
     public RelativeExpiringMapEntryTest() {
     }
@@ -130,7 +131,7 @@ public class RelativeExpiringMapEntryTest {
         Object result1 = instance.validateKey();
         assertNotNull(result1);
         assertEquals(expResult,result1);
-        sleep(1900);
+        sleep(4999);
         Object result = instance.validateKey();
         assertNull(result); 
     }
