@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'idea'
 
-group = 'com.officemax'
+group = 'com.bos'
 version = '1.0'
 
 description = """cache_api"""
