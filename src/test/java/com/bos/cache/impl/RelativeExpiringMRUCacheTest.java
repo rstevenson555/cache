@@ -5,34 +5,28 @@
 
 package com.bos.cache.impl;
 
-import com.bos.cache.factory.impl.RelativeExpiringFactory;
 import com.bos.cache.factory.impl.CacheDataFactory;
+import com.bos.cache.factory.impl.RelativeExpiringFactory;
 import com.bos.cache.mapentry.RelativeExpiringMapEntry;
+import org.junit.*;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
- *
  * @author i0360b6
  */
 public class RelativeExpiringMRUCacheTest {
-RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
-        Date startupdate = new Date(mx.getStartTime());
-        long startuptime = startupdate.getTime();
+    RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
+    Date startupdate = new Date(mx.getStartTime());
+    long startuptime = startupdate.getTime();
+
     public RelativeExpiringMRUCacheTest() {
     }
 
@@ -58,13 +52,13 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testGetFactory() {
         System.out.println("getFactory");
-        MRUCache instance = new MRUCache<String,String>(new RelativeExpiringFactory<String,String>(startuptime,1000));
+        MRUCache instance = new MRUCache<String, String>(new RelativeExpiringFactory<String, String>(startuptime, 1000));
         CacheDataFactory expResult = null;
         CacheDataFactory result = instance.getFactory();
         //assertNotEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
-        assertNotNull("Factory is null",result);
+        assertNotNull("Factory is null", result);
     }
 
     /**
@@ -73,7 +67,7 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testSize() {
         System.out.println("size");
-        MRUCache instance = new MRUCache<String,String>(new RelativeExpiringFactory<String,String>(startuptime,1000));
+        MRUCache instance = new MRUCache<String, String>(new RelativeExpiringFactory<String, String>(startuptime, 1000));
         instance.put("Test", "value");
         int expResult = 1;
         int result = instance.size();
@@ -88,12 +82,12 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testSizeAfterExpired() {
         System.out.println("size");
-        MRUCache instance = new MRUCache<String,String>(new RelativeExpiringFactory<String,String>(startuptime,1000));
+        MRUCache instance = new MRUCache<String, String>(new RelativeExpiringFactory<String, String>(startuptime, 1000));
         instance.put("Test", "value");
         try {
             Thread.sleep(1050);
+        } catch (InterruptedException ie) {
         }
-        catch(InterruptedException ie) {}
         int expResult = 0;
         int result = instance.size();
         assertEquals(expResult, result);
@@ -108,8 +102,8 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     public void testGet() {
         System.out.println("get");
         Object key = "Key";
-        MRUCache instance = new MRUCache<String,String>(new RelativeExpiringFactory<String,String>(startuptime,1000));
-        instance.put("Key","Value");
+        MRUCache instance = new MRUCache<String, String>(new RelativeExpiringFactory<String, String>(startuptime, 1000));
+        instance.put("Key", "Value");
         Object expResult = "Value";
         Object result = instance.get(key);
         assertEquals(expResult, result);
@@ -124,9 +118,9 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     public void testGetEntry() {
         System.out.println("getEntry");
         Object key = "Key";
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key","Value");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key", "Value");
         CacheData expResult = cf.createPair("Key", "Value");
         CacheData result = instance.getEntry(key);
         assertEquals(expResult, result);
@@ -140,7 +134,7 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testClear() {
         System.out.println("clear");
-        MRUCache instance = new MRUCache<String,String>(new RelativeExpiringFactory<String,String>(startuptime,1000));
+        MRUCache instance = new MRUCache<String, String>(new RelativeExpiringFactory<String, String>(startuptime, 1000));
         instance.put("Key", "Value");
         instance.clear();
         int expResult = 0;
@@ -157,7 +151,7 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     public void testRemove() {
         System.out.println("remove");
         Object key = "Key";
-        MRUCache instance = new MRUCache<String,String>(new RelativeExpiringFactory<String,String>(startuptime,1000));
+        MRUCache instance = new MRUCache<String, String>(new RelativeExpiringFactory<String, String>(startuptime, 1000));
         instance.put("Key", "Value");
         Object expResult = "Value";
         Object result = instance.remove(key);
@@ -173,9 +167,9 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     public void testRemoveEntry() {
         System.out.println("removeEntry");
         Object key = "Key";
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key","Value");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key", "Value");
         CacheData expResult = cf.createPair("Key", "Value");
         CacheData result = instance.removeEntry(key);
         assertEquals(expResult, result);
@@ -191,14 +185,14 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
         System.out.println("put");
         Object key = "Key";
         Object value = "Value";
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key","Value1");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key", "Value1");
         Object expResult = "Value1";
         Object result = instance.put(key, value);
         assertEquals(expResult, result);
         expResult = "Value";
-        assertEquals(expResult,instance.get(key));
+        assertEquals(expResult, instance.get(key));
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
@@ -211,9 +205,9 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
         System.out.println("putExpiredKey");
         Object key = "Key";
         Object value = "Value";
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key","Value1");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key", "Value1");
         Object expResult = "Value1";
         Object result = instance.put(key, value);
         assertEquals(expResult, result);
@@ -227,10 +221,10 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testKeySet() {
         System.out.println("keySet");
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key1","Value1");
-        instance.put("Key2","Value1");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key1", "Value1");
+        instance.put("Key2", "Value1");
         HashSet set = new HashSet();
         set.add("Key1");
         set.add("Key2");
@@ -247,13 +241,13 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testKeySetAfterExpiration() {
         System.out.println("keySetAfterExpiration");
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,500);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key1","Value1");
-        instance.put("Key2","Value2");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 500);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key1", "Value1");
+        instance.put("Key2", "Value2");
         sleep(900);
-        instance.put("Key3","Value3");
-        instance.put("Key4","Value4");
+        instance.put("Key3", "Value3");
+        instance.put("Key4", "Value4");
         Set expResult = new HashSet();
         expResult.add("Key3");
         expResult.add("Key4");
@@ -300,13 +294,13 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testEntrySet() {
         System.out.println("entrySet");
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key1","Value1");
-        instance.put("Key2","Value2");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key1", "Value1");
+        instance.put("Key2", "Value2");
         HashSet set = new HashSet();
-        set.add(new RelativeExpiringMapEntry("Key1","Value1",cf));
-        set.add(new RelativeExpiringMapEntry("Key2","Value2",cf));
+        set.add(new RelativeExpiringMapEntry("Key1", "Value1", cf));
+        set.add(new RelativeExpiringMapEntry("Key2", "Value2", cf));
         Set expResult = set;
         Set result = instance.entrySet();
         assertEquals(expResult, result);
@@ -344,10 +338,10 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testValues() {
         System.out.println("values");
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key1","Value1");
-        instance.put("Key2","Value2");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key1", "Value1");
+        instance.put("Key2", "Value2");
         Collection expResult = new ArrayList();
         expResult.add("Value1");
         expResult.add("Value2");
@@ -363,13 +357,13 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testValuesAfterExpiration() {
         System.out.println("valuesAfterExpiration");
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,500);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key1","Value1");
-        instance.put("Key2","Value2");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 500);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key1", "Value1");
+        instance.put("Key2", "Value2");
         sleep(900);
-        instance.put("Key3","Value3");
-        instance.put("Key4","Value4");
+        instance.put("Key3", "Value3");
+        instance.put("Key4", "Value4");
         Collection expResult = new ArrayList();
         expResult.add("Value3");
         expResult.add("Value4");
@@ -386,15 +380,15 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     public void testPutAll() {
         System.out.println("putAll");
         //Map<? extends K, ? extends V> m = null;
-        HashMap<String,String> m = new HashMap<String,String>();
-        m.put("Key1","Value1");
-        m.put("Key2","Value2");
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
+        HashMap<String, String> m = new HashMap<String, String>();
+        m.put("Key1", "Value1");
+        m.put("Key2", "Value2");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
         instance.putAll(m);
         HashSet set = new HashSet();
-        set.add(new RelativeExpiringMapEntry("Key1","Value1",cf));
-        set.add(new RelativeExpiringMapEntry("Key2","Value2",cf));
+        set.add(new RelativeExpiringMapEntry("Key1", "Value1", cf));
+        set.add(new RelativeExpiringMapEntry("Key2", "Value2", cf));
         Set expResult = set;
         Set result = instance.entrySet();
         assertEquals(expResult, result);
@@ -409,9 +403,9 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     public void testContainsValue() {
         System.out.println("containsValue");
         Object value = "Value";
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
-        instance.put("Key","Value");
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
+        instance.put("Key", "Value");
         boolean expResult = true;
         boolean result = instance.containsValue(value);
         assertEquals(expResult, result);
@@ -426,8 +420,8 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     public void testContainsKey() {
         System.out.println("containsKey");
         Object key = "Key";
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
         instance.put("Key", "Value");
         boolean expResult = true;
         boolean result = instance.containsKey(key);
@@ -442,7 +436,8 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     private static void sleep(long millis) {
         try {
             Thread.sleep(millis);
-        }catch(InterruptedException ie) {}
+        } catch (InterruptedException ie) {
+        }
     }
 
     /**
@@ -452,8 +447,8 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     public void testContainsKeyAfterExpiration() {
         System.out.println("containsKeyAfterExpiration");
         Object key = "Key";
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,500);
-        MRUCache instance = new MRUCache<String,String>(cf);
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 500);
+        MRUCache instance = new MRUCache<String, String>(cf);
         instance.put("Key", "Value");
         sleep(900);
         boolean expResult = false;
@@ -470,8 +465,8 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     @Test
     public void testIsEmpty() {
         System.out.println("isEmpty");
-        CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-        MRUCache instance = new MRUCache<String,String>(cf);
+        CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+        MRUCache instance = new MRUCache<String, String>(cf);
         boolean expResult = true;
         boolean result = instance.isEmpty();
         assertEquals(expResult, result);
@@ -486,12 +481,12 @@ RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
     public void testClone() {
         try {
             System.out.println("clone");
-            CacheDataFactory<String,String> cf = new RelativeExpiringFactory<String,String>(startuptime,1000);
-            MRUCache instance = new MRUCache<String,String>(cf);
+            CacheDataFactory<String, String> cf = new RelativeExpiringFactory<String, String>(startuptime, 1000);
+            MRUCache instance = new MRUCache<String, String>(cf);
             instance.put("Key1", "Value1");
             instance.put("Key2", "Value2");
             Object expResult = instance.entrySet();
-            MRUCache copy = (MRUCache)instance.clone();
+            MRUCache copy = (MRUCache) instance.clone();
             Object result = copy.entrySet();
             assertEquals(expResult, result);
             //fail("The test case is a prototype.");
