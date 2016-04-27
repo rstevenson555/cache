@@ -579,7 +579,6 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
     }
 
     CacheData<K, V> createEntry(K key, int index, V value) {
-        //CacheData<K, V> entry = new CacheData<K, V>(key, value);
         CacheData<K, V> entry = factory.createPair(key, value);
         entry.next = elementData[index];
         elementData[index] = entry;
@@ -587,7 +586,6 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
     }
 
     CacheData<K, V> createHashedEntry(K key, int index, int hash) {
-        //CacheData<K, V> entry = new CacheData<K, V>(key, hash);
         CacheData<K, V> entry = factory.createPair(key, hash);
         entry.next = elementData[index];
         elementData[index] = entry;
