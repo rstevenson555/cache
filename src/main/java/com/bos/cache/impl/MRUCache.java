@@ -84,10 +84,10 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
             return false;
         }
 
-        CacheData<K, V> m = getEntry(key);
-        if (m != null) {
+        CacheData<K, V> cacheData = getEntry(key);
+        if (cacheData != null) {
             // see if the key passed in matches this one
-            if (m.validateKey((K) key, cacheDelegate) == null) {
+            if (cacheData.validateKey((K) key, cacheDelegate) == null) {
                 return true;
             }
         }
@@ -109,15 +109,14 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
             return null;
         }
 
-        CacheData<K, V> m = getEntry(key);
         V value;
-        if (m != null) {
+        CacheData<K, V> cacheData = getEntry(key);
+        if (cacheData != null) {
             // see if the key passed in matches this one
-            if ((value = m.validateKey((K) key, cacheDelegate)) != null) {
+            if ((value = cacheData.validateKey((K) key, cacheDelegate)) != null) {
                 return value;
             }
-        } else {
-        }
+        } 
         return null;
     }
 
@@ -128,7 +127,6 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @return a CacheData pair is returned or null if no match
      */
     final CacheData<K, V> getEntry(Object key) {
-        CacheData<K, V> pair;
         // validateKey the key in the buckets
 
         // synchronization is not a problem here
@@ -136,8 +134,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         // it will be properly handled, either it won't find a validateKey in the if or the
         // obj being returned will be null, that is fine and expected for a no-validateKey
         // then the client will just validateKey whatever data he was looking for in the buckets
-        pair = buckets.get(Math.abs(key.hashCode()) % buckets.length());
-        return pair;
+        return buckets.get(Math.abs(key.hashCode()) % buckets.length());
     }
 
     /**
