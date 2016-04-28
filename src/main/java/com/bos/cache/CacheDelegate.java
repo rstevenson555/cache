@@ -10,8 +10,8 @@ package com.bos.cache;
  */
 public interface CacheDelegate {
 
-    public void keyLookup();
-    public void keyMatched();
-    public void keyExpired();
+    public void keyLookup(Object key);
+    public void keyMatched(Object key);
+    public void keyExpired(Object key);
         
 }

@@ -371,18 +371,16 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
     @Override
     public boolean containsKey(Object key) {
         if (cacheDelegate != null) {
-            cacheDelegate.keyLookup();
+            cacheDelegate.keyLookup(key);
         }
         CacheData<K, V> m = getEntry(key);
         // see if the key passed in matches this one
         if (m != null) {
-            if (m.validateKey((K) key, cacheDelegate) != null) {
+            if (m.validateKey(key, cacheDelegate) != null) {
                 return true;
 
             }
-        } else {
-            
-        }
+        } 
         return false;
     }
 
@@ -433,7 +431,7 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
     @Override
     public V get(Object key) {
         if (cacheDelegate != null) {
-            cacheDelegate.keyLookup();
+            cacheDelegate.keyLookup(key);
         }
         if (key == null) {
             return null;
@@ -442,7 +440,7 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
         V value;
         if (m != null) {
             // see if the key passed in matches this one
-            if ((value = m.validateKey((K) key, cacheDelegate)) != null) {
+            if ((value = m.validateKey(key, cacheDelegate)) != null) {
                 return value;
             }
         } else {

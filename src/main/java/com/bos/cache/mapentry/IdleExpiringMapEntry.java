@@ -57,7 +57,7 @@ public class IdleExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> {
      * and returns the data assosicated
      **/
     private V getValueTouch(boolean touch) {
-        if (touch == true) {
+        if (touch) {
             touch();
         }
         return value;
@@ -69,21 +69,20 @@ public class IdleExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> {
      * @return <V>
      */
 	@Override
-    final public V validateKey(K theKey,CacheDelegate dele) {
+    final public V validateKey(final Object theKey,final CacheDelegate cacheDelegate) {
         V aResult = null;
 
         if (key.equals(theKey)) {
-            if ( dele != null) dele.keyMatched();
+            if ( cacheDelegate != null) cacheDelegate.keyMatched(theKey);
             long itime = getIdleTime();
             if ( itime < getFactory().getTimeInMillis())  { // ?? minutes of inactivity, so get rid of it
                 aResult = getValueTouch(true);
             } else {
-                if ( dele != null) dele.keyExpired();
+                if ( cacheDelegate != null) cacheDelegate.keyExpired(theKey);
             }
             return aResult;
-        } else {
-        }
-        return aResult;
+        } 
+        return null;
     }
 
     /**

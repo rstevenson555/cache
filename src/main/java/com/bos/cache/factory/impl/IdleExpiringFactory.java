@@ -30,7 +30,7 @@ public class IdleExpiringFactory<K,V> extends TimeExpiringFactory<K,V> {
      * @return returns the CacheData pair object
      */
     @Override
-    public CacheData<K,V> createPair(K key,V value)
+    public CacheData<K,V> createPair(final K key,final V value)
     {
         return new IdleExpiringMapEntry<K,V>(key,value, this);
     }
@@ -42,7 +42,7 @@ public class IdleExpiringFactory<K,V> extends TimeExpiringFactory<K,V> {
      * @return returns the CacheData pair object
      */
     @Override
-    public CacheData<K,V> createPair(K key,int hash)
+    public CacheData<K,V> createPair(final K key,final int hash)
     {
         return new IdleExpiringMapEntry<K,V>(key,hash, this);
     }

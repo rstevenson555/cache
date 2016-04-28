@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
- * This is a implementation of a very fast MRU list, the size of the buckets are a fixed size, so we don't have to deal
+ * This is a implementation of a very fast AGE_EXPIRY list, the size of the buckets are a fixed size, so we don't have to deal
  * with growing and shrinking of the buckets the Cache will tend to have items in it that are most often used and will
  * throw out the Least Used Items. The size of the cache should be a primary number. This helps to optimize the
  * distribution of keys to avoid collisions. This class implements the Map interface so can be used interchangable with
@@ -65,14 +65,43 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      */
     public MRUCache(int size, CacheDataFactory<K, V> fact) {
         factory = fact;
-        buckets = new AtomicReference[size];
+        buckets = new AtomicReference[nextPrime(size)];
         for(int i =0, tot = buckets.length;i<tot;i++) {
             buckets[i] = new AtomicReference<CacheData<K, V>>(null);
         }
     }
 
-    public void setCacheDelegate(CacheDelegate dele) {
-        cacheDelegate = dele;
+    /**
+     * this cache works best using a prime number as the size of the elements,
+     * it helps give a better disribution of keys; helps avoid collisions....
+     * this calculates the next higher prime number from the cache size provided
+     * @param n
+     * @return
+     */
+    public static int nextPrime(int n) {
+        boolean isPrime = false;
+        int start = 2; // start at 2 and omit your if statement
+
+        while (!isPrime) {
+            // always incrememnt n at the beginning to check a new number
+            n += 1;
+            // redefine max boundary here
+            int m = (int) Math.ceil(Math.sqrt(n));
+
+            isPrime = true;
+            // increment i by 1, not 2 (you're skipping numbers...)
+            for (int i = start; i <= m; i++) {
+                if (n % i == 0) {
+                    isPrime = false;
+                    break;
+                }
+            }
+        }
+        return n;
+    }
+
+    public void setCacheDelegate(CacheDelegate cacheDelegate) {
+        this.cacheDelegate = cacheDelegate;
     }
 
     /**
@@ -89,7 +118,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         CacheData<K, V> cacheData = getEntry(key);
         if (cacheData != null) {
             // see if the key passed in matches this one
-            if (cacheData.validateKey((K) key, cacheDelegate) == null) {
+            if (cacheData.validateKey(key, cacheDelegate) == null) {
                 return true;
             }
         }
@@ -104,7 +133,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      */
     public V get(Object key) {
         if (cacheDelegate != null) {
-            cacheDelegate.keyLookup();
+            cacheDelegate.keyLookup(key);
         }
 
         if (key == null) {
@@ -115,7 +144,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         CacheData<K, V> cacheData = getEntry(key);
         if (cacheData != null) {
             // see if the key passed in matches this one
-            if ((value = cacheData.validateKey((K) key, cacheDelegate)) != null) {
+            if ((value = cacheData.validateKey(key, cacheDelegate)) != null) {
                 return value;
             }
         } 
@@ -177,9 +206,9 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
             return null;
         }
 
-        CacheData<K, V> cachedata = removeEntry(key);
-        if (cachedata != null) {
-            return cachedata.value;
+        CacheData<K, V> cacheData = removeEntry(key);
+        if (cacheData != null) {
+            return cacheData.value;
         }
         return null;
     }
@@ -538,17 +567,17 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      */
     public boolean containsKey(Object key) {
         if (cacheDelegate != null) {
-            cacheDelegate.keyLookup();
+            cacheDelegate.keyLookup(key);
         }
 
         if (key == null) {
             return false;
         }
 
-        CacheData<K, V> m = getEntry(key);
-        if (m != null) {
+        CacheData<K, V> cacheData = getEntry(key);
+        if (cacheData != null) {
             // see if the key passed in matches this one
-            if ((m.validateKey((K) key, cacheDelegate)) != null) {
+            if ((cacheData.validateKey( key, cacheDelegate)) != null) {
                 return true;
             }
         }
@@ -583,6 +612,15 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
             }
         }
         return valid;
+    }
+
+    /**
+     * an alias for size(), which returns the active # of elements in the cache,
+     * if you want the total size call getTotalSize
+     * @return
+     */
+    public int getActiveSize() {
+        return size();    
     }
 
     /**

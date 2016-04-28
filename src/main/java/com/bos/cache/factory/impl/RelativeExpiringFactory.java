@@ -32,13 +32,13 @@ public class RelativeExpiringFactory<K,V> extends TimeExpiringFactory<K,V> {
     }
 
     @Override
-    public CacheData<K,V> createPair(K key,V value)
+    public CacheData<K,V> createPair(final K key,final V value)
     {
         return new RelativeExpiringMapEntry<K,V>(key,value, this);
     }
 
     @Override
-    public CacheData<K,V> createPair(K key,int hash)
+    public CacheData<K,V> createPair(final K key,final int hash)
     {
         return new RelativeExpiringMapEntry<K,V>(key,hash, this);
     }

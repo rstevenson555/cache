@@ -17,7 +17,7 @@ abstract public class CacheDataFactory<K,V> {
      * @param value
      * @return returns the CacheData key/value pair
      */
-    abstract public CacheData<K,V> createPair(K key,V value);
-    abstract public CacheData<K,V> createPair(K key,int hash);
+    abstract public CacheData<K,V> createPair(final K key,final V value);
+    abstract public CacheData<K,V> createPair(final K key,final int hash);
 
 }

@@ -29,7 +29,7 @@ public class AgeExpiringFactory<K,V> extends TimeExpiringFactory<K,V> {
      * @return CacheData<K,V>
      */
     @Override
-    public CacheData<K,V> createPair(K key,V value)
+    public CacheData<K,V> createPair(final K key,final V value)
     {
         return new AgeExpiringMapEntry<K,V>(key,value, this);
     }
@@ -41,7 +41,7 @@ public class AgeExpiringFactory<K,V> extends TimeExpiringFactory<K,V> {
      * @return CacheData<K,V>
      */
     @Override
-    public CacheData<K,V> createPair(K key,int hash)
+    public CacheData<K,V> createPair(final K key,final int hash)
     {
         return new AgeExpiringMapEntry<K,V>(key,hash, this);
     }

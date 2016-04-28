@@ -4,6 +4,8 @@ import com.bos.cache.factory.impl.AgeExpiringFactory;
 import com.bos.cache.CacheDelegate;
 import com.bos.cache.factory.impl.TimeExpiringFactory;
 
+import java.util.Date;
+
 public class AgeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K,V> implements Cloneable
 {
     private long birthTime;
@@ -41,20 +43,20 @@ public class AgeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K,V> impleme
      * @return <V>
      */
     @Override
-    final public V validateKey(K theKey,CacheDelegate delegate)
+    final public V validateKey(final Object theKey,final CacheDelegate delegate)
     {
         V aResult = null;
         if ( key.equals(theKey))  {
-            if ( delegate != null) delegate.keyMatched();
+            if ( delegate != null) delegate.keyMatched(theKey);
             long death = birthTime + getFactory().getTimeInMillis();
             if ( System.currentTimeMillis() < death) {
                 aResult = value;
             } else {
-                if ( delegate != null) delegate.keyExpired();
+                if ( delegate != null) delegate.keyExpired(theKey);
             }
             return aResult;
         }
-        return aResult;
+        return null;
     }
 
 }

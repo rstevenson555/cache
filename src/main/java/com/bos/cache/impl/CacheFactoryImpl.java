@@ -9,7 +9,7 @@ import com.bos.cache.factory.impl.RelativeExpiringFactory;
 import java.util.Map;
 
 /**
- * This is the factory used to createPair instances of the MRU(Most recently used) cache
+ * This is the factory used to createPair instances of the AGE_EXPIRY(Most recently used) cache
  * and the expiring cache
  * To use first createPair an instance of the factory with newInstance, then createPair the
  * cache from that instance

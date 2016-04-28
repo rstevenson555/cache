@@ -45,10 +45,10 @@ public class NonExpiringMapEntry<K, V> extends CacheData<K, V> {
      * @param theKey the key to validate
      * @return returns the value matched or null if it is deternined to be not matched
      */
-    public V validateKey(K theKey,CacheDelegate dele) {
+    public V validateKey(final Object theKey,final CacheDelegate cacheDelegate) {
 
         if (key.equals(theKey)) {
-            if (dele !=null) dele.keyMatched();
+            if (cacheDelegate !=null) cacheDelegate.keyMatched(theKey);
             return value;
         }
         return null;

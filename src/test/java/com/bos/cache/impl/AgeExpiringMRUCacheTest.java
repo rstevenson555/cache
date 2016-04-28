@@ -48,6 +48,21 @@ public class AgeExpiringMRUCacheTest {
     @After
     public void tearDown() {
     }
+    
+    @Test
+    public void testIterator() {
+        MRUCache instance = new MRUCache<String,String>(23,new AgeExpiringFactory<String,String>(100000));
+        instance.put("Test", "value");
+        CacheIterator iterator = new CacheIterator(instance);
+        Object data = null;
+        while(iterator.hasNext()) {
+            data = iterator.next();
+            if ( data!=null ) {
+                break;
+            }
+        }
+        assertNotNull("Data null",data); 
+    }
 
     /**
      * Test of getFactory method, of class MRUCache.

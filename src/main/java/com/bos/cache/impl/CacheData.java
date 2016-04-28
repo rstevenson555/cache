@@ -18,7 +18,7 @@ public abstract class CacheData<K, V> implements Map.Entry<K, V>, Comparable<Cac
     final int origKeyHash;
     CacheData<K, V> next;
 
-    protected CacheData(K theKey, int hash) {
+    protected CacheData(final K theKey, final int hash) {
         key = theKey;
         this.origKeyHash = hash;
     }
@@ -28,7 +28,7 @@ public abstract class CacheData<K, V> implements Map.Entry<K, V>, Comparable<Cac
      * @param theKey
      * @param theValue
      */
-    public CacheData(K theKey, V theValue) {
+    public CacheData(final K theKey, final V theValue) {
         key = theKey;
         value = theValue;
         origKeyHash = (theKey == null ? 0 : theKey.hashCode());
@@ -39,7 +39,7 @@ public abstract class CacheData<K, V> implements Map.Entry<K, V>, Comparable<Cac
      * @param key
      * @return the value of null if no valid match is found
      */
-    abstract public V validateKey(K key,CacheDelegate delegate);
+    abstract public V validateKey(final Object key,final CacheDelegate delegate);
 
     /**
      * Validate the key for this object

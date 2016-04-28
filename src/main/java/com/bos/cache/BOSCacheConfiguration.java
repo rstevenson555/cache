@@ -24,14 +24,32 @@ import java.util.Collection;
 public class BOSCacheConfiguration implements CachingConfigurer {
     private String name;
     private int maxEntriesLocalHeap;
-    private int timeToLiveSeconds;
+    private long timeToLiveMillis;
+    private long relativeOffsetMillis;
+    private BOSCache.ExpiryType expiryType;
 
-    public int getTimeToLiveSeconds() {
-        return timeToLiveSeconds;
+    public BOSCache.ExpiryType getExpiryType() {
+        return expiryType;
     }
 
-    public void setTimeToLiveSeconds(int timeToLiveSeconds) {
-        this.timeToLiveSeconds = timeToLiveSeconds;
+    public void setExpiryType(BOSCache.ExpiryType expiryType) {
+        this.expiryType = expiryType;
+    }
+
+    public long getRelativeOffsetMillis() {
+        return relativeOffsetMillis;
+    }
+
+    public void setRelativeOffsetMillis(long relativeOffsetMillis) {
+        this.relativeOffsetMillis = relativeOffsetMillis;
+    }
+
+    public long getTimeToLiveMillis() {
+        return timeToLiveMillis;
+    }
+
+    public void setTimeToLiveMillis(long timeToLiveMillis) {
+        this.timeToLiveMillis = timeToLiveMillis;
     }
 
     public int getMaxEntriesLocalHeap() {
@@ -66,14 +84,24 @@ public class BOSCacheConfiguration implements CachingConfigurer {
     }
 
     public BOSCache create() {
-        return new BOSCache(name, getMaxEntriesLocalHeap(), getTimeToLiveSeconds());
+        switch (expiryType) {
+            case RELATIVE_EXPIRY:
+                return new BOSCache(name, expiryType, getMaxEntriesLocalHeap(), getTimeToLiveMillis(), getRelativeOffsetMillis());
+            case IDLE_EXPIRY:
+                return new BOSCache(name, expiryType, getMaxEntriesLocalHeap(), getTimeToLiveMillis());
+            case NO_EXPIRY:
+                return new BOSCache(name, expiryType, getMaxEntriesLocalHeap());
+            case AGE_EXPIRY:
+                return new BOSCache(name, expiryType, getMaxEntriesLocalHeap(), getTimeToLiveMillis());
+            default:
+                return null;
+        }
     }
 
     @Bean
     public Collection<BOSCache> internalCaches() throws URISyntaxException {
         final Collection<BOSCache> caches = new ArrayList<BOSCache>();
-        // caches.add(new MemCache("stockCache", 11212));
-//        caches.add(new BOSCache("viewCache", 11211));
+        caches.add(create());
         return caches;
     }
 

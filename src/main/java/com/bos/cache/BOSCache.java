@@ -14,38 +14,49 @@ import org.springframework.cache.support.SimpleValueWrapper;
  * Created by 1328975 on 4/27/16.
  */
 public class BOSCache implements Cache {
-    enum CacheType {
-        MRU,
-        IDLE,
+    public enum ExpiryType {
+        AGE_EXPIRY,
+        IDLE_EXPIRY,
         NO_EXPIRY,
-        RELATIVE
+        RELATIVE_EXPIRY
     }
+
     private final String name;
     private static Logger LOGGER = LoggerFactory.getLogger(BOSCache.class);
-    private MRUCache<Object,Object> cache;
+    private MRUCache<Object, Object> cache;
 
-    public BOSCache(final String name,CacheType cacheType,int size, int timeToLiveSeconds ) {
+    public BOSCache(final String name, ExpiryType expiryType, int size, long timeToLiveMillis) {
         this.name = name;
-        switch (cacheType) {
-            case MRU:
-                cache = new MRUCache<Object,Object>(size, new AgeExpiringFactory<Object,Object>(timeToLiveSeconds));
+        switch (expiryType) {
+            case AGE_EXPIRY:
+                cache = new MRUCache<Object, Object>(size, new AgeExpiringFactory<Object, Object>(timeToLiveMillis));
                 break;
-            case IDLE:
-                cache = new MRUCache<Object,Object>(size, new IdleExpiringFactory<Object,Object>(timeToLiveSeconds));
-                break;
-            case NO_EXPIRY:
-                cache = new MRUCache<Object,Object>(size, new NonExpiringFactory<Object,Object>());
+            case IDLE_EXPIRY:
+                cache = new MRUCache<Object, Object>(size, new IdleExpiringFactory<Object, Object>(timeToLiveMillis));
                 break;
         }
     }
 
-    public BOSCache(final String name,CacheType cacheType,int size, int timeToLiveSeconds, int offsetTimeInSeconds ) {
+    public BOSCache(final String name, ExpiryType expiryType, int size, long timeToLiveMillis, long offsetTimeInMillis) {
         this.name = name;
-        switch (cacheType) {
-            case RELATIVE:
-                cache = new MRUCache<Object,Object>(size, new RelativeExpiringFactory<Object,Object>(offsetTimeInSeconds, timeToLiveSeconds));
+        switch (expiryType) {
+            case RELATIVE_EXPIRY:
+                cache = new MRUCache<Object, Object>(size, new RelativeExpiringFactory<Object, Object>(offsetTimeInMillis, timeToLiveMillis));
                 break;
         }
+    }
+
+    public BOSCache(final String name, ExpiryType expiryType, int size) {
+        this.name = name;
+        switch (expiryType) {
+            case NO_EXPIRY:
+                cache = new MRUCache<Object, Object>(size, new NonExpiringFactory<Object, Object>());
+                break;
+        }
+    }
+    
+    public void setCacheDelegate(CacheDelegate cacheDelegate) {
+        cache.setCacheDelegate(cacheDelegate);
     }
 
     public String getName() {
