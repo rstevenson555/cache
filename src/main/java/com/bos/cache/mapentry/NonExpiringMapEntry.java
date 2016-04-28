@@ -50,7 +50,6 @@ public class NonExpiringMapEntry<K, V> extends CacheData<K, V> {
         if (key.equals(theKey)) {
             if (dele !=null) dele.keyMatched();
             return value;
-        } else {
         }
         return null;
     }

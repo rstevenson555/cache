@@ -1,25 +1,25 @@
 package com.bos.cache.mapentry;
 
 import com.bos.cache.factory.impl.AgeExpiringFactory;
-import com.bos.cache.factory.impl.CacheDataFactory;
 import com.bos.cache.CacheDelegate;
+import com.bos.cache.factory.impl.TimeExpiringFactory;
 
-public class AgeExpiringMapEntry<K, V> extends NonExpiringMapEntry<K,V> implements Cloneable
+public class AgeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K,V> implements Cloneable
 {
     private long birthTime;
 
-    public AgeExpiringMapEntry(K theKey,V value,CacheDataFactory<K,V> factory)
+    public AgeExpiringMapEntry(K theKey,V value,TimeExpiringFactory<K,V> factory)
     {
         super(theKey,value,factory);
 	    birthTime = System.currentTimeMillis();
     }
 
-    public AgeExpiringMapEntry(K theKey,int hash,CacheDataFactory<K,V> factory)
+    public AgeExpiringMapEntry(K theKey,int hash,TimeExpiringFactory<K,V> factory)
     {
         super(theKey,hash,factory);
 	    birthTime = System.currentTimeMillis();
     }
-
+    
     @Override
     public void reset()
     {
@@ -41,19 +41,18 @@ public class AgeExpiringMapEntry<K, V> extends NonExpiringMapEntry<K,V> implemen
      * @return <V>
      */
     @Override
-    final public V validateKey(K theKey,CacheDelegate dele)
+    final public V validateKey(K theKey,CacheDelegate delegate)
     {
         V aResult = null;
         if ( key.equals(theKey))  {
-            if ( dele != null) dele.keyMatched();
-            long death = birthTime + ( ((AgeExpiringFactory<K,V>)factory).getTimeInMillis());
+            if ( delegate != null) delegate.keyMatched();
+            long death = birthTime + getFactory().getTimeInMillis();
             if ( System.currentTimeMillis() < death) {
                 aResult = value;
             } else {
-                if ( dele != null) dele.keyExpired();
+                if ( delegate != null) delegate.keyExpired();
             }
             return aResult;
-        } else {
         }
         return aResult;
     }

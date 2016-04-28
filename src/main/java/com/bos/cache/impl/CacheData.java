@@ -39,7 +39,7 @@ public abstract class CacheData<K, V> implements Map.Entry<K, V>, Comparable<Cac
      * @param key
      * @return the value of null if no valid match is found
      */
-    abstract public V validateKey(K key,CacheDelegate dele);
+    abstract public V validateKey(K key,CacheDelegate delegate);
 
     /**
      * Validate the key for this object

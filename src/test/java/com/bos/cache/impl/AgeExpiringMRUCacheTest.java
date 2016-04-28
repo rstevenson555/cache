@@ -7,6 +7,7 @@ package com.bos.cache.impl;
 
 import com.bos.cache.factory.impl.AgeExpiringFactory;
 import com.bos.cache.factory.impl.CacheDataFactory;
+import com.bos.cache.factory.impl.TimeExpiringFactory;
 import com.bos.cache.mapentry.AgeExpiringMapEntry;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -318,7 +319,7 @@ public class AgeExpiringMRUCacheTest {
     @Test
     public void testEntrySet() {
         System.out.println("entrySet");
-        CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
+        TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
         MRUCache instance = new MRUCache<String,String>(cf);
         instance.put("Key1","Value1");
         instance.put("Key2","Value2");
@@ -338,7 +339,7 @@ public class AgeExpiringMRUCacheTest {
     @Test
     public void testEntrySetAfterExpiration() {
         System.out.println("entrySetAfterExpiration");
-        CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(500);
+        TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(500);
         MRUCache instance = new MRUCache<String,String>(cf);
         instance.put("Key1","Value1");
         instance.put("Key2","Value2");
@@ -363,7 +364,7 @@ public class AgeExpiringMRUCacheTest {
     @Test
     public void testEntrySetIterator() {
         System.out.println("entrySetIterator");
-        CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(500);
+        TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(500);
         MRUCache instance = new MRUCache<String,String>(cf);
         instance.put("Key1","Value1");
         instance.put("Key2","Value2");
@@ -423,7 +424,7 @@ public class AgeExpiringMRUCacheTest {
     @Test
     public void testValues() {
         System.out.println("values");
-        CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
+        TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
         MRUCache instance = new MRUCache<String,String>(cf);
         instance.put("Key1","Value1");
         instance.put("Key2","Value2");
@@ -446,7 +447,7 @@ public class AgeExpiringMRUCacheTest {
         HashMap<String,String> m = new HashMap<String,String>();
         m.put("Key1","Value1");
         m.put("Key2","Value2");
-        CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
+        TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
         MRUCache instance = new MRUCache<String,String>(cf);
         instance.putAll(m);
         HashSet set = new HashSet();
@@ -466,7 +467,7 @@ public class AgeExpiringMRUCacheTest {
     public void testContainsValue() {
         System.out.println("containsValue");
         Object value = "Value";
-        CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
+        TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
         MRUCache instance = new MRUCache<String,String>(cf);
         instance.put("Key","Value");
         boolean expResult = true;
@@ -483,7 +484,7 @@ public class AgeExpiringMRUCacheTest {
     public void testContainsKey() {
         System.out.println("containsKey");
         Object key = "Key";
-        CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
+        TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
         MRUCache instance = new MRUCache<String,String>(cf);
         instance.put("Key", "Value");
         boolean expResult = true;
@@ -509,7 +510,7 @@ public class AgeExpiringMRUCacheTest {
     public void testContainsKeyAfterExpiration() {
         System.out.println("containsKeyAfterExpiration");
         Object key = "Key";
-        CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(500);
+        TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(500);
         MRUCache instance = new MRUCache<String,String>(cf);
         instance.put("Key", "Value");
         sleep(900);
@@ -527,7 +528,7 @@ public class AgeExpiringMRUCacheTest {
     @Test
     public void testIsEmpty() {
         System.out.println("isEmpty");
-        CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
+        TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
         MRUCache instance = new MRUCache<String,String>(cf);
         boolean expResult = true;
         boolean result = instance.isEmpty();
@@ -543,7 +544,7 @@ public class AgeExpiringMRUCacheTest {
     public void testClone() {
         try {
             System.out.println("clone");
-            CacheDataFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
+            TimeExpiringFactory<String,String> cf = new AgeExpiringFactory<String,String>(1000);
             MRUCache instance = new MRUCache<String,String>(cf);
             instance.put("Key1", "Value1");
             instance.put("Key2", "Value2");

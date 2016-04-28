@@ -1,20 +1,20 @@
 package com.bos.cache.mapentry;
 
-import com.bos.cache.factory.impl.CacheDataFactory;
+import com.bos.cache.factory.impl.IdleExpiringFactory;
 import com.bos.cache.factory.impl.TimeExpiringFactory;
 import com.bos.cache.CacheDelegate;
 
-public class IdleExpiringMapEntry<K, V> extends NonExpiringMapEntry<K, V> {
+public class IdleExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> {
 
     private long idleTime;
 
-    public IdleExpiringMapEntry(K key, V value, CacheDataFactory<K,V> factory) {
+    public IdleExpiringMapEntry(K key, V value, TimeExpiringFactory<K,V> factory) {
         super(key, value,factory);
         
 	    idleTime = System.currentTimeMillis();
     }
 
-    public IdleExpiringMapEntry(K key, int hash, CacheDataFactory<K,V> factory) {
+    public IdleExpiringMapEntry(K key, int hash, TimeExpiringFactory<K,V> factory) {
         super(key, hash,factory);
 
 	    idleTime = System.currentTimeMillis();
@@ -75,7 +75,7 @@ public class IdleExpiringMapEntry<K, V> extends NonExpiringMapEntry<K, V> {
         if (key.equals(theKey)) {
             if ( dele != null) dele.keyMatched();
             long itime = getIdleTime();
-            if ( itime < (((TimeExpiringFactory<K,V>)factory).getTimeInMillis()) ) { // ?? minutes of inactivity, so get rid of it
+            if ( itime < getFactory().getTimeInMillis())  { // ?? minutes of inactivity, so get rid of it
                 aResult = getValueTouch(true);
             } else {
                 if ( dele != null) dele.keyExpired();

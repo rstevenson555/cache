@@ -3,6 +3,7 @@ package com.bos.cache.mapentry;
 import com.bos.cache.factory.impl.CacheDataFactory;
 import com.bos.cache.factory.impl.RelativeExpiringFactory;
 import com.bos.cache.CacheDelegate;
+import com.bos.cache.factory.impl.TimeExpiringFactory;
 
 /**
  * Defines a class to store a Key/value pair that is valid from a relative fixed time
@@ -13,25 +14,25 @@ import com.bos.cache.CacheDelegate;
  * @param <K>
  * @param <V>
  */
-public class RelativeExpiringMapEntry<K, V> extends NonExpiringMapEntry<K,V> implements Cloneable
+public class RelativeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K,V> implements Cloneable
 {
     private long offsetTime = 0L;
 
-    public RelativeExpiringMapEntry(K key,V value,CacheDataFactory<K,V> factory)
+    public RelativeExpiringMapEntry(K key,V value,TimeExpiringFactory<K,V> factory)
     {
         super(key,value,factory);
 	    long now = System.currentTimeMillis();
 	    long otime =((RelativeExpiringFactory<K,V>)factory).getOffsetTimeInMillis();
-	    long maxAge =((RelativeExpiringFactory<K,V>)factory).getTimeInMillis();
+	    long maxAge =getFactory().getTimeInMillis();
 	    offsetTime = (now - otime )/ maxAge;
     }
 
-    public RelativeExpiringMapEntry(K key,int hash,CacheDataFactory<K,V> factory)
+    public RelativeExpiringMapEntry(K key,int hash,TimeExpiringFactory<K,V> factory)
     {
         super(key,hash,factory);
 	    long now = System.currentTimeMillis();
 	    long otime =((RelativeExpiringFactory<K,V>)factory).getOffsetTimeInMillis();
-	    long maxAge =((RelativeExpiringFactory<K,V>)factory).getTimeInMillis();
+	    long maxAge =getFactory().getTimeInMillis();
 	    offsetTime = (now - otime ) / maxAge;
     }
 
@@ -44,7 +45,7 @@ public class RelativeExpiringMapEntry<K, V> extends NonExpiringMapEntry<K,V> imp
     {
 	    long now = System.currentTimeMillis();
 	    long otime =((RelativeExpiringFactory<K,V>)factory).getOffsetTimeInMillis();
-	    long maxAge =((RelativeExpiringFactory<K,V>)factory).getTimeInMillis();
+	    long maxAge =factory.getTimeInMillis();
 	    offsetTime = (now - otime ) / maxAge;
     }
 
@@ -61,7 +62,7 @@ public class RelativeExpiringMapEntry<K, V> extends NonExpiringMapEntry<K,V> imp
             if ( dele !=null) dele.keyMatched();
             long now = System.currentTimeMillis();
 	        long otime =((RelativeExpiringFactory<K,V>)factory).getOffsetTimeInMillis();
-	        long maxAge =((RelativeExpiringFactory<K,V>)factory).getTimeInMillis();
+	        long maxAge =getFactory().getTimeInMillis();
 	        long noffsetTime =  (now - otime ) / maxAge;
             if ( noffsetTime <= offsetTime) {
                 aResult = value;
