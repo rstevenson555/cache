@@ -21,7 +21,7 @@ public class RelativeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> i
         super(key, value, factory);
         long now = System.currentTimeMillis();
         long otime = ((RelativeExpiringFactory<K, V>) factory).getOffsetTimeInMillis();
-        long maxAge = getFactory().getTimeInMillis();
+        long maxAge = getFactory().getExpireTimeMillis();
         offsetTime = (now - otime) / maxAge;
     }
 
@@ -29,7 +29,7 @@ public class RelativeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> i
         super(key, hash, factory);
         long now = System.currentTimeMillis();
         long otime = ((RelativeExpiringFactory<K, V>) factory).getOffsetTimeInMillis();
-        long maxAge = getFactory().getTimeInMillis();
+        long maxAge = getFactory().getExpireTimeMillis();
         offsetTime = (now - otime) / maxAge;
     }
 
@@ -41,7 +41,7 @@ public class RelativeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> i
     public void reset() {
         long now = System.currentTimeMillis();
         long otime = ((RelativeExpiringFactory<K, V>) factory).getOffsetTimeInMillis();
-        long maxAge = factory.getTimeInMillis();
+        long maxAge = factory.getExpireTimeMillis();
         offsetTime = (now - otime) / maxAge;
     }
 
@@ -59,7 +59,7 @@ public class RelativeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> i
             }
             long now = System.currentTimeMillis();
             long otime = ((RelativeExpiringFactory<K, V>) factory).getOffsetTimeInMillis();
-            long maxAge = getFactory().getTimeInMillis();
+            long maxAge = getFactory().getExpireTimeMillis();
             long noffsetTime = (now - otime) / maxAge;
             if (noffsetTime <= offsetTime) {
                 aResult = value;
@@ -69,7 +69,7 @@ public class RelativeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> i
                 }
             }
             return aResult;
-        } 
+        }
         return null;
     }
 

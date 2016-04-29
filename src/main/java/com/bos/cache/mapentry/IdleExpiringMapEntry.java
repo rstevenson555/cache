@@ -1,6 +1,5 @@
 package com.bos.cache.mapentry;
 
-import com.bos.cache.factory.impl.IdleExpiringFactory;
 import com.bos.cache.factory.impl.TimeExpiringFactory;
 import com.bos.cache.CacheDelegate;
 
@@ -75,7 +74,7 @@ public class IdleExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> {
         if (key.equals(theKey)) {
             if ( cacheDelegate != null) cacheDelegate.keyMatched(theKey);
             long itime = getIdleTime();
-            if ( itime < getFactory().getTimeInMillis())  { // ?? minutes of inactivity, so get rid of it
+            if ( itime < getFactory().getExpireTimeMillis())  { // ?? minutes of inactivity, so get rid of it
                 aResult = getValueTouch(true);
             } else {
                 if ( cacheDelegate != null) cacheDelegate.keyExpired(theKey);

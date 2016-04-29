@@ -25,7 +25,7 @@ public class BOSCacheConfiguration implements CachingConfigurer {
     private String name;
     private int maxEntriesLocalHeap;
     private long timeToLiveMillis;
-    private long relativeOffsetMillis;
+    private long baseOffsetTimeMillis;
     private BOSCache.ExpiryType expiryType;
 
     public BOSCache.ExpiryType getExpiryType() {
@@ -36,12 +36,12 @@ public class BOSCacheConfiguration implements CachingConfigurer {
         this.expiryType = expiryType;
     }
 
-    public long getRelativeOffsetMillis() {
-        return relativeOffsetMillis;
+    public long getBaseOffsetTimeMillis() {
+        return baseOffsetTimeMillis;
     }
 
-    public void setRelativeOffsetMillis(long relativeOffsetMillis) {
-        this.relativeOffsetMillis = relativeOffsetMillis;
+    public void setBaseOffsetTimeMillis(long relativeOffsetMillis) {
+        this.baseOffsetTimeMillis = relativeOffsetMillis;
     }
 
     public long getTimeToLiveMillis() {
@@ -86,7 +86,7 @@ public class BOSCacheConfiguration implements CachingConfigurer {
     public BOSCache create() {
         switch (expiryType) {
             case RELATIVE_EXPIRY:
-                return new BOSCache(name, expiryType, getMaxEntriesLocalHeap(), getTimeToLiveMillis(), getRelativeOffsetMillis());
+                return new BOSCache(name, expiryType, getMaxEntriesLocalHeap(), getTimeToLiveMillis(), getBaseOffsetTimeMillis());
             case IDLE_EXPIRY:
                 return new BOSCache(name, expiryType, getMaxEntriesLocalHeap(), getTimeToLiveMillis());
             case NO_EXPIRY:

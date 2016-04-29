@@ -201,7 +201,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @param key the key to validateKey and remove
      * @return returns the previous value at this key position in the cache
      */
-    public V remove(Object key) {
+    public V remove(final Object key) {
         if (key == null) {
             return null;
         }
@@ -227,7 +227,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @param pos
      * @param data
      */
-    final void setCacheData(int pos,CacheData<K,V> data) {
+    final void setCacheData(int pos,final CacheData<K,V> data) {
         buckets[pos].set(data);
     }
     
@@ -254,7 +254,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @param key   the key value used to validateKey this value
      * @param value the value object associated with the given key
      */
-    public V put(K key, V value) {
+    public V put(final K key, final V value) {
         if (key == null) {
             return null;
         }

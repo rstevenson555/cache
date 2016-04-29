@@ -9,7 +9,7 @@ package com.bos.cache.factory.impl;
 public abstract class TimeExpiringFactory<K,V> extends CacheDataFactory<K,V> {
 
         // default 1 minute
-    private long timeInMillis = ((60 * 1000) * 30);          // how long before object becomes stale
+    private long expireTimeMillis = ((60 * 1000) * 30);          // how long before object becomes stale
 
     /**
      * Create a idle expiring behavior
@@ -17,15 +17,15 @@ public abstract class TimeExpiringFactory<K,V> extends CacheDataFactory<K,V> {
      */
     public TimeExpiringFactory(long milliseconds)
     {
-        this.timeInMillis = milliseconds;
+        this.expireTimeMillis = milliseconds;
     }
 
     /**
      * gets the period that an object is considered
      * to be 'stale' or out of date
      **/
-    public long getTimeInMillis() {
-        return timeInMillis;
+    public long getExpireTimeMillis() {
+        return expireTimeMillis;
     }
 
 }

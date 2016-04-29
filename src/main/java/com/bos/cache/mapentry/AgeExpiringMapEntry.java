@@ -1,10 +1,7 @@
 package com.bos.cache.mapentry;
 
-import com.bos.cache.factory.impl.AgeExpiringFactory;
 import com.bos.cache.CacheDelegate;
 import com.bos.cache.factory.impl.TimeExpiringFactory;
-
-import java.util.Date;
 
 public class AgeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K,V> implements Cloneable
 {
@@ -48,7 +45,7 @@ public class AgeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K,V> impleme
         V aResult = null;
         if ( key.equals(theKey))  {
             if ( delegate != null) delegate.keyMatched(theKey);
-            long death = birthTime + getFactory().getTimeInMillis();
+            long death = birthTime + getFactory().getExpireTimeMillis();
             if ( System.currentTimeMillis() < death) {
                 aResult = value;
             } else {
