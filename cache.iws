@@ -8,12 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f8f48655-ae99-478b-bba7-ede76f2ee566" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache.iws" afterPath="$PROJECT_DIR$/cache.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bos/cache/BOSCacheConfiguration.java" afterPath="$PROJECT_DIR$/src/main/java/com/bos/cache/BOSCacheConfiguration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bos/cache/factory/impl/TimeExpiringFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/bos/cache/factory/impl/TimeExpiringFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bos/cache/impl/MRUCache.java" afterPath="$PROJECT_DIR$/src/main/java/com/bos/cache/impl/MRUCache.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bos/cache/mapentry/AgeExpiringMapEntry.java" afterPath="$PROJECT_DIR$/src/main/java/com/bos/cache/mapentry/AgeExpiringMapEntry.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bos/cache/mapentry/IdleExpiringMapEntry.java" afterPath="$PROJECT_DIR$/src/main/java/com/bos/cache/mapentry/IdleExpiringMapEntry.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bos/cache/mapentry/RelativeExpiringMapEntry.java" afterPath="$PROJECT_DIR$/src/main/java/com/bos/cache/mapentry/RelativeExpiringMapEntry.java" />
     </list>
     <ignored path="cache.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1005,7 +999,7 @@
       <workItem from="1461775977811" duration="404000" />
       <workItem from="1461786937383" duration="17240000" />
       <workItem from="1461866742929" duration="5950000" />
-      <workItem from="1461882212453" duration="1560000" />
+      <workItem from="1461882212453" duration="1602000" />
     </task>
     <task id="LOCAL-00001" summary="optimizations code/cleanup">
       <created>1461847091901</created>
@@ -1019,7 +1013,13 @@
       <option name="project" value="LOCAL" />
       <updated>1461874886798</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="optimizations code/cleanup">
+      <created>1461936766198</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1461936766198</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1055,7 +1055,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28411000" />
+    <option name="totallyTimeSpent" value="28453000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="980" extended-state="6" />
