@@ -647,7 +647,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         for (Map.Entry<K, V> pair : entrySet()) {
             // Optimize in case the Entry is one of our own.
             if (pair != null) {
-                copy.buckets[next].set(factory.createPair(pair.getKey(), pair.getValue()));
+                copy.buckets[next++].set(factory.createPair(pair.getKey(), pair.getValue()));
             }
         }
         return copy;
