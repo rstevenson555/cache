@@ -5,7 +5,7 @@ import com.bos.cache.CacheDelegate;
 
 public class IdleExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> {
 
-    private long idleTime;
+    volatile private long idleTime;
 
     public IdleExpiringMapEntry(K key, V value, TimeExpiringFactory<K,V> factory) {
         super(key, value,factory);
