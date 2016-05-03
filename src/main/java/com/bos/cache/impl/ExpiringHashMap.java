@@ -19,6 +19,8 @@ package com.bos.cache.impl;
  */
 import com.bos.cache.CacheDelegate;
 import com.bos.cache.factory.impl.CacheDataFactory;
+import com.bos.cache.mapentry.CacheData;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -115,14 +117,14 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
             }
             if (futureEntry == null) {
                 currentEntry = associatedMap.elementData[position++];
-                futureEntry = currentEntry.next;
+                futureEntry = currentEntry.getNext();
                 prevEntry = null;
             } else {
                 if (currentEntry != null) {
                     prevEntry = currentEntry;
                 }
                 currentEntry = futureEntry;
-                futureEntry = futureEntry.next;
+                futureEntry = futureEntry.getNext();
             }
         }
 
@@ -132,10 +134,10 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
                 throw new IllegalStateException();
             }
             if (prevEntry == null) {
-                int index = currentEntry.origKeyHash & (associatedMap.elementData.length - 1);
-                associatedMap.elementData[index] = associatedMap.elementData[index].next;
+                int index = currentEntry.getOrigKeyHash() & (associatedMap.elementData.length - 1);
+                associatedMap.elementData[index] = associatedMap.elementData[index].getNext();
             } else {
-                prevEntry.next = currentEntry.next;
+                prevEntry.setNext(currentEntry.getNext());
             }
             currentEntry = null;
             expectedModCount++;
@@ -165,7 +167,7 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
         public K next() {
             makeNext();
-            return currentEntry.key;
+            return currentEntry.getKey();
         }
     }
 
@@ -177,7 +179,7 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
         public V next() {
             makeNext();
-            return currentEntry.value;
+            return currentEntry.getValue();
         }
     }
 
@@ -228,9 +230,9 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
         private static boolean valuesEq(CacheData cd, Map.Entry<?, ?> oEntry) {
             return (cd != null)
-                    && ((cd.value == null)
+                    && ((cd.getValue() == null)
                     ? (oEntry.getValue() == null)
-                    : (areEqualValues(cd.value, oEntry.getValue())));
+                    : (areEqualValues(cd.getValue(), oEntry.getValue())));
         }
 
         @Override
@@ -397,15 +399,15 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
             for (int i = 0; i < elementData.length; i++) {
                 CacheData<K, V> cd = elementData[i];
                 while (cd != null) {
-                    if (areEqualValues(value, cd.value) && cd.validateKey() != null) {
+                    if (areEqualValues(value, cd.getValue()) && cd.validateKey() != null) {
                         return true;
                     }
-                    cd = cd.next;
+                    cd = cd.getNext();
                 }
             }
         } /*
          * else { for (int i = 0; i < elementData.length; i++) { CacheData<K, V> CacheData = elementData[i]; while
-         * (CacheData != null) { if (CacheData.value == null) { return true; } CacheData = CacheData.next; } } }
+         * (CacheData != null) { if (CacheData.getValue() == null) { return true; } CacheData = CacheData.getNext(); } } }
          */
         return false;
     }
@@ -464,16 +466,16 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
     final CacheData<K, V> findNonNullKeyEntry(Object key, int index, int keyHash) {
         CacheData<K, V> m = elementData[index];
         while (m != null
-                && (m.origKeyHash != keyHash || !areEqualKeys(key, m.key))) {
-            m = m.next;
+                && (m.getOrigKeyHash() != keyHash || !areEqualKeys(key, m.getKey()))) {
+            m = m.getNext();
         }
         return m;
     }
 
     final CacheData<K, V> findNullKeyEntry() {
         CacheData<K, V> m = elementData[0];
-        while (m != null && m.key != null) {
-            m = m.next;
+        while (m != null && m.getKey() != null) {
+            m = m.getNext();
         }
         return m;
     }
@@ -568,9 +570,9 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
             }
         }
 
-        V result = cd.value;
+        V result = cd.getValue();
         // replace the value
-        cd.value = value;
+        cd.setValue(value);
         cd.reset();  // reset all timestamps, because we are replacing the value
         // so we need to reset the expirations
         return result;
@@ -578,14 +580,14 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
     CacheData<K, V> createEntry(K key, int index, V value) {
         CacheData<K, V> entry = factory.createPair(key, value);
-        entry.next = elementData[index];
+        entry.setNext(elementData[index]);
         elementData[index] = entry;
         return entry;
     }
 
     CacheData<K, V> createHashedEntry(K key, int index, int hash) {
         CacheData<K, V> entry = factory.createPair(key, hash);
-        entry.next = elementData[index];
+        entry.setNext(elementData[index]);
         elementData[index] = entry;
         return entry;
     }
@@ -621,9 +623,9 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
         for (int i = 0; i < elementData.length; i++) {
             CacheData<K, V> cd = elementData[i];
             while (cd != null) {
-                int index = cd.origKeyHash & (length - 1);
-                CacheData<K, V> next = cd.next;
-                cd.next = newData[index];
+                int index = cd.getOrigKeyHash() & (length - 1);
+                CacheData<K, V> next = cd.getNext();
+                cd.setNext(newData[index]);
                 newData[index] = cd;
                 cd = next;
             }
@@ -646,7 +648,7 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
     public V remove(Object key) {
         CacheData<K, V> cd = removeEntry(key);
         if (cd != null) {
-            return cd.value;
+            return cd.getValue();
         }
         return null;
     }
@@ -655,15 +657,15 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
      * Remove the given CacheData from the Cache. Assumes that the CacheData is in the map.
      */
     final void removeEntry(CacheData<K, V> cd) {
-        int index = cd.origKeyHash & (elementData.length - 1);
+        int index = cd.getOrigKeyHash() & (elementData.length - 1);
         CacheData<K, V> m = elementData[index];
         if (m.equals(cd)) {
-            elementData[index] = cd.next;
+            elementData[index] = cd.getNext();
         } else {
-            while (m.next != cd) {
-                m = m.next;
+            while (m.getNext() != cd) {
+                m = m.getNext();
             }
-            m.next = cd.next;
+            m.setNext(cd.getNext());
 
         }
         modCount++;
@@ -678,24 +680,24 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
             int hash = computeHashCode(key);
             index = hash & (elementData.length - 1);
             cd = elementData[index];
-            while (cd != null && !(cd.origKeyHash == hash && areEqualKeys(key, cd.key))) {
+            while (cd != null && !(cd.getOrigKeyHash() == hash && areEqualKeys(key, cd.getKey()))) {
                 last = cd;
-                cd = cd.next;
+                cd = cd.getNext();
             }
         } else {
             cd = elementData[0];
-            while (cd != null && cd.key != null) {
+            while (cd != null && cd.getKey() != null) {
                 last = cd;
-                cd = cd.next;
+                cd = cd.getNext();
             }
         }
         if (cd == null) {
             return null;
         }
         if (last == null) {
-            elementData[index] = cd.next;
+            elementData[index] = cd.getNext();
         } else {
-            last.next = cd.next;
+            last.setNext(cd.getNext());
         }
         modCount++;
         elementCount--;
@@ -770,9 +772,9 @@ public class ExpiringHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V
         Iterator<?> iterator = entrySet().iterator();
         while (iterator.hasNext()) {
             CacheData<?, ?> cd = (CacheData<?, ?>) iterator.next();
-            stream.writeObject(cd.key);
-            stream.writeObject(cd.value);
-            //cd = cd.next;
+            stream.writeObject(cd.getKey());
+            stream.writeObject(cd.getValue());
+            //cd = cd.getNext();
         }
     }
 

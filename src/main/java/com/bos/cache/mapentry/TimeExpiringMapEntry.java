@@ -1,9 +1,7 @@
 package com.bos.cache.mapentry;
 
 import com.bos.cache.CacheDelegate;
-import com.bos.cache.factory.impl.CacheDataFactory;
 import com.bos.cache.factory.impl.TimeExpiringFactory;
-import com.bos.cache.impl.CacheData;
 
 /**
  * Created by 1328975 on 4/27/16.

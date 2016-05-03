@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import com.bos.cache.mapentry.CacheData;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

@@ -39,6 +39,7 @@ public class RelativeExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> i
      */
     @Override
     public void reset() {
+        super.reset();
         long now = System.currentTimeMillis();
         long otime = ((RelativeExpiringFactory<K, V>) factory).getOffsetTimeInMillis();
         long maxAge = factory.getExpireTimeMillis();

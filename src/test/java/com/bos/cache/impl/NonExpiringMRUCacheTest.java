@@ -7,6 +7,7 @@ package com.bos.cache.impl;
 
 import com.bos.cache.factory.impl.NonExpiringFactory;
 import com.bos.cache.factory.impl.CacheDataFactory;
+import com.bos.cache.mapentry.CacheData;
 import com.bos.cache.mapentry.NonExpiringMapEntry;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,6 +1,6 @@
 package com.bos.cache.factory.impl;
 
-import com.bos.cache.impl.CacheData;
+import com.bos.cache.mapentry.CacheData;
 import com.bos.cache.mapentry.NonExpiringMapEntry;
 
 /**

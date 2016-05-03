@@ -1,6 +1,5 @@
 package com.bos.cache.mapentry;
 
-import com.bos.cache.impl.CacheData;
 import com.bos.cache.factory.impl.CacheDataFactory;
 import com.bos.cache.CacheDelegate;
 
@@ -38,7 +37,8 @@ public class NonExpiringMapEntry<K, V> extends CacheData<K, V> {
     /**
      * reset does nothing for non expiring
      */
-    public void reset() {}
+    public void reset() {
+    }
 
     /**
      * compare the key's to see if the key provided matches this objects key

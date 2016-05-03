@@ -23,6 +23,7 @@ public class IdleExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> {
     @Override
     public void reset()
     {
+        super.reset();
 	    idleTime = System.currentTimeMillis();
     }
 

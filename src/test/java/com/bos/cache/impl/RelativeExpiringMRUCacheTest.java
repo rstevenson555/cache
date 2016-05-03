@@ -8,6 +8,7 @@ package com.bos.cache.impl;
 import com.bos.cache.factory.impl.CacheDataFactory;
 import com.bos.cache.factory.impl.RelativeExpiringFactory;
 import com.bos.cache.factory.impl.TimeExpiringFactory;
+import com.bos.cache.mapentry.CacheData;
 import com.bos.cache.mapentry.RelativeExpiringMapEntry;
 import org.junit.*;
 

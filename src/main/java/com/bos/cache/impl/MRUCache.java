@@ -6,10 +6,10 @@ package com.bos.cache.impl;
 
 import com.bos.cache.CacheDelegate;
 import com.bos.cache.factory.impl.CacheDataFactory;
+import com.bos.cache.mapentry.CacheData;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * This is a implementation of a very fast AGE_EXPIRY list, the size of the buckets are a fixed size, so we don't have to deal
@@ -66,7 +66,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
     public MRUCache(int size, CacheDataFactory<K, V> fact) {
         factory = fact;
         buckets = new AtomicReference[nextPrime(size)];
-        for(int i =0, tot = buckets.length;i<tot;i++) {
+        for (int i = 0, tot = buckets.length; i < tot; i++) {
             buckets[i] = new AtomicReference<CacheData<K, V>>(null);
         }
     }
@@ -75,6 +75,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * this cache works best using a prime number as the size of the elements,
      * it helps give a better disribution of keys; helps avoid collisions....
      * this calculates the next higher prime number from the cache size provided
+     *
      * @param n
      * @return
      */
@@ -147,19 +148,21 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
             if ((value = cacheData.validateKey(key, cacheDelegate)) != null) {
                 return value;
             }
-        } 
+        }
         return null;
     }
 
     /**
      * return the position of the key by doing the calculation
      * guarantted to fall within the bounds of the array
+     *
      * @param key
      * @return
      */
     final int getKeyPosition(final Object key) {
         return Math.abs(key.hashCode()) % buckets.length;
     }
+
     /**
      * returns the CachData pair for the specified key
      *
@@ -208,29 +211,31 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
 
         CacheData<K, V> cacheData = removeEntry(key);
         if (cacheData != null) {
-            return cacheData.value;
+            return cacheData.getValue();
         }
         return null;
     }
 
     /**
      * return the data at pos
+     *
      * @param pos
      * @return
      */
-    final CacheData<K,V> getCacheData(int pos) {
+    final CacheData<K, V> getCacheData(int pos) {
         return buckets[pos].get();
     }
 
     /**
      * set cachedata in a atomicreference
+     *
      * @param pos
      * @param data
      */
-    final void setCacheData(int pos,final CacheData<K,V> data) {
+    final void setCacheData(int pos, final CacheData<K, V> data) {
         buckets[pos].set(data);
     }
-    
+
     /**
      * sets a entry to null, does not shrink the cache size
      *
@@ -244,7 +249,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         // either before or after a client looks at it, it's not a problem
         int pos = getKeyPosition(key);
         CacheData<K, V> cacheData = getCacheData(pos);
-        setCacheData(pos,null);
+        setCacheData(pos, null);
         return cacheData;
     }
 
@@ -263,9 +268,15 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         // previously there
         int pos = getKeyPosition(key);
         CacheData<K, V> cacheData = getCacheData(pos);
-        setCacheData(pos,factory.createPair(key, value));
-        
-        return (cacheData == null) ? null : cacheData.value;
+        if (cacheData != null) {
+            cacheData.reset();
+            cacheData.setKey(key);
+            cacheData.setValue(value);
+        } else {
+            setCacheData(pos, factory.createPair(key, value));
+        }
+
+        return (cacheData == null) ? null : cacheData.getValue();
     }
 
     /**
@@ -354,9 +365,9 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
 
         private static boolean valuesEq(CacheData cacheData, Map.Entry<?, ?> oEntry) {
             return (cacheData != null)
-                    && ((cacheData.value == null)
+                    && ((cacheData.getValue() == null)
                     ? (oEntry.getValue() == null)
-                    : (areEqualValues(cacheData.value, oEntry.getValue())));
+                    : (areEqualValues(cacheData.getValue(), oEntry.getValue())));
         }
 
         @Override
@@ -428,14 +439,14 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
             }
             if (futureEntry == null) {
                 currentEntry = associatedMap.buckets[position++].get();
-                futureEntry = currentEntry.next;
+                futureEntry = currentEntry.getNext();
                 prevEntry = null;
             } else {
                 if (currentEntry != null) {
                     prevEntry = currentEntry;
                 }
                 currentEntry = futureEntry;
-                futureEntry = futureEntry.next;
+                futureEntry = futureEntry.getNext();
             }
         }
 
@@ -444,9 +455,9 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
                 throw new IllegalStateException();
             }
             if (prevEntry == null) {
-                associatedMap.remove(currentEntry.key);
+                associatedMap.remove(currentEntry.getKey());
             } else {
-                prevEntry.next = currentEntry.next;
+                prevEntry.setNext(currentEntry.getNext());
             }
             currentEntry = null;
         }
@@ -472,7 +483,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
 
         public K next() {
             makeNext();
-            return currentEntry.key;
+            return currentEntry.getKey();
         }
     }
 
@@ -484,7 +495,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
 
         public V next() {
             makeNext();
-            return currentEntry.value;
+            return currentEntry.getValue();
         }
     }
 
@@ -577,7 +588,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         CacheData<K, V> cacheData = getEntry(key);
         if (cacheData != null) {
             // see if the key passed in matches this one
-            if ((cacheData.validateKey( key, cacheDelegate)) != null) {
+            if ((cacheData.validateKey(key, cacheDelegate)) != null) {
                 return true;
             }
         }
@@ -617,10 +628,11 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
     /**
      * an alias for size(), which returns the active # of elements in the cache,
      * if you want the total size call getTotalSize
+     *
      * @return
      */
     public int getActiveSize() {
-        return size();    
+        return size();
     }
 
     /**

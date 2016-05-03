@@ -2,6 +2,8 @@
 
 package com.bos.cache.impl;
 
+import com.bos.cache.mapentry.CacheData;
+
 import java.util.Iterator;
 
 /**
