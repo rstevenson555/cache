@@ -5,10 +5,13 @@ import com.bos.cache.factory.impl.IdleExpiringFactory;
 import com.bos.cache.factory.impl.NonExpiringFactory;
 import com.bos.cache.factory.impl.RelativeExpiringFactory;
 import com.bos.cache.impl.MRUCache;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
+
+import java.util.logging.Logger;
 
 /**
  * Created by 1328975 on 4/27/16.
@@ -22,7 +25,7 @@ public class BOSCache implements Cache {
     }
 
     private final String name;
-    private static Logger LOGGER = LoggerFactory.getLogger(BOSCache.class);
+//    private static Logger LOGGER = LoggerFactory.getLogger(BOSCache.class);
     private MRUCache<Object, Object> cache;
 
     public BOSCache(final String name, ExpiryType expiryType, int size, long timeToLiveMillis) {
@@ -72,7 +75,7 @@ public class BOSCache implements Cache {
         try {
             value = cache.get(key);
         } catch (final Exception e) {
-            LOGGER.warn("error getting key from cache:", e);
+//            LOGGER.warn("error getting key from cache:", e);
         }
         if (value == null) {
             return null;

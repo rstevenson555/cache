@@ -75,6 +75,7 @@ public abstract class CacheData<K, V> implements Map.Entry<K, V>, Comparable<Cac
      * @return returns the current value
      */
     public V setValue(V theValue) {
+        reset();
         value = theValue;
         return value;
     }
@@ -85,11 +86,18 @@ public abstract class CacheData<K, V> implements Map.Entry<K, V>, Comparable<Cac
      * @param key
      */
     public void setKey(K key) {
+        reset();
         this.key = key;
     }
 
     public int getOrigKeyHash() {
         return origKeyHash;
+    }
+    
+    public void setKeyValue(K key, V value) {
+        reset();
+        setKey(key);
+        setValue(value);
     }
 
     public CacheData<K, V> getNext() {

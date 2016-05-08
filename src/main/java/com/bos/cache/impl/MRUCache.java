@@ -28,6 +28,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
     private AbstractSet<K> keySet;
     private AbstractCollection<V> valuesCollection = null;
     private CacheDelegate cacheDelegate = null;
+    private CacheSource<K,V> source = null;
 
     /**
      * @return Returns the Factory associated to this cache
@@ -44,7 +45,7 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @throws NullPointerException if {@code map} is {@code null}.
      */
     public MRUCache(Map<? extends K, ? extends V> map, CacheDataFactory<K, V> fact) {
-        this(map.size(), fact);
+        this(map.size(), fact, null);
         putAllImpl(map);
     }
 
@@ -54,7 +55,15 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @param fact the specific factory is provided
      */
     public MRUCache(CacheDataFactory<K, V> fact) {
-        this(DEFAULTSIZE, fact);
+        this(DEFAULTSIZE, fact, null);
+    }
+
+    public static void main(String []args ) {
+       
+        int size = 500;
+        int newSize = size + (int)(size * .15);
+        int nextPrime = nextPrime(newSize);
+        System.out.println(nextPrime);
     }
 
     /**
@@ -63,9 +72,20 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
      * @param size the number of buckets entries that the buckets can maintain, should be a prime number
      * @param fact the factory to use with this cache
      */
-    public MRUCache(int size, CacheDataFactory<K, V> fact) {
+    public MRUCache(int size, CacheDataFactory<K, V> fact ) {
+        this(size,fact,null);
+    }
+    
+    /**
+     * Contructor initialize the buckets to the specified size
+     *
+     * @param size the number of buckets entries that the buckets can maintain, should be a prime number
+     * @param fact the factory to use with this cache
+     */
+    public MRUCache(int size, CacheDataFactory<K, V> fact, CacheSource<K,V> source) {
         factory = fact;
-        buckets = new AtomicReference[nextPrime(size)];
+        this.source = source;
+        buckets = new AtomicReference[nextPrime(size + (int)(size * .15))];
         for (int i = 0, tot = buckets.length; i < tot; i++) {
             buckets[i] = new AtomicReference<CacheData<K, V>>(null);
         }
@@ -148,6 +168,12 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
             if ((value = cacheData.validateKey(key, cacheDelegate)) != null) {
                 return value;
             }
+        }
+        // if we made it here and source!=null use the passthrough
+        if (source!=null) {
+            value = source.get(key);
+            put((K)key, value);
+            return value;
         }
         return null;
     }
@@ -267,16 +293,16 @@ public class MRUCache<K, V> implements Map<K, V>, Cloneable {
         // find the place to put it and stuff it in, overwriting what was
         // previously there
         int pos = getKeyPosition(key);
+        V prevValue = null;
         CacheData<K, V> cacheData = getCacheData(pos);
         if (cacheData != null) {
-            cacheData.reset();
-            cacheData.setKey(key);
-            cacheData.setValue(value);
+            prevValue = cacheData.getValue();
+            cacheData.setKeyValue(key,value);
         } else {
             setCacheData(pos, factory.createPair(key, value));
         }
 
-        return (cacheData == null) ? null : cacheData.getValue();
+        return (cacheData == null) ? null : prevValue;
     }
 
     /**

@@ -49,7 +49,8 @@ public class IdleExpiringMapEntry<K, V> extends TimeExpiringMapEntry<K, V> {
      **/
     @Override
     public V getValue() {
-        return getValueTouch(true);
+        return getValueTouch(false);
+//        return value;
     }
 
     /**
